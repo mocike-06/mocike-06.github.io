@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四级备考站 · CET-4 Study</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+/* ===== 设计 token ===== */
+:root{
+  --bg:#f2f6fc;
+  --surface:#ffffff;
+  --surface-2:#eaf0fa;
+  --ink:#17233d;
+  --ink-2:#55627c;
+  --line:#dfe7f3;
+  --primary:#2b5fd9;
+  --primary-deep:#1e46a8;
+  --primary-soft:#e3ecfd;
+  --accent:#f0a42c;
+  --accent-soft:#fdf1dc;
+  --success:#2e9e6b;
+  --success-soft:#e3f4ec;
+  --danger:#d64550;
+  --danger-soft:#fbe9ea;
+  --shadow:0 10px 30px rgba(30,60,130,.08);
+  --radius:16px;
+  --font-serif:"Noto Serif SC",serif;
+  --font-sans:"Noto Sans SC",system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+}
+body.theme-dark{
+  --bg:#0d1524;
+  --surface:#15203a;
+  --surface-2:#1b2947;
+  --ink:#e9eef8;
+  --ink-2:#9fb0cc;
+  --line:#263550;
+  --primary:#5b8bf0;
+  --primary-deep:#7ea3f5;
+  --primary-soft:#223359;
+  --accent:#f5b94c;
+  --accent-soft:#3a2f14;
+  --success:#4cc48d;
+  --success-soft:#143327;
+  --danger:#ef767f;
+  --danger-soft:#3a1a1f;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--ink);
+  line-height:1.6;
+  min-height:100vh;
+  transition:background .3s,color .3s;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+
+/* ===== 顶部导航 ===== */
+.app-header{
+  position:sticky;top:0;z-index:50;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(8px);
+}
+.header-inner{
+  max-width:1100px;margin:0 auto;padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  height:64px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-serif);font-weight:900;font-size:20px}
+.brand-badge{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-deep));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;letter-spacing:1px;
+}
+.main-nav ul{display:flex;list-style:none;gap:4px}
+.main-nav a{
+  display:block;padding:9px 14px;border-radius:10px;font-size:14px;font-weight:500;
+  color:var(--ink-2);transition:.2s;
+}
+.main-nav a:hover{color:var(--ink);background:var(--surface-2)}
+.main-nav a.active{color:var(--primary);background:var(--primary-soft);font-weight:700}
+.header-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{
+  width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink-2);transition:.2s;
+}
+.icon-btn:hover{background:var(--surface-2);color:var(--ink)}
+.icon-btn svg{width:20px;height:20px}
+#hamburger{display:none}
+
+/* ===== 布局 ===== */
+.app-main{max-width:1100px;margin:0 auto;padding:28px 20px 80px}
+.view{display:none}
+.view.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.section-title{font-family:var(--font-serif);font-size:26px;font-weight:900;margin-bottom:6px}
+.section-sub{color:var(--ink-2);font-size:14px;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+
+/* ===== 通用按钮 ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 22px;border-radius:12px;font-size:15px;font-weight:700;
+  background:var(--primary);color:#fff;transition:.2s;min-height:44px;
+}
+.btn:hover{background:var(--primary-deep);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.secondary{background:var(--primary-soft);color:var(--primary)}
+.btn.secondary:hover{background:var(--primary);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink-2);border:1px solid var(--line)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--ink-2)}
+.btn.danger{background:var(--danger-soft);color:var(--danger)}
+.btn.danger:hover{background:var(--danger);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn.sm{padding:8px 14px;font-size:13px;min-height:38px;border-radius:9px}
+
+/* ===== 首页 ===== */
+.hero{
+  background:linear-gradient(135deg,var(--primary-deep),var(--primary) 55%,#6f9bf5);
+  border-radius:20px;padding:40px 36px;color:#fff;margin-bottom:24px;
+  position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.hero::before{
+  content:"";position:absolute;right:70px;bottom:-90px;width:180px;height:180px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.hero h1{font-family:var(--font-serif);font-size:34px;font-weight:900;margin-bottom:10px;position:relative;z-index:1}
+.hero p{font-size:15px;opacity:.92;max-width:520px;position:relative;z-index:1;margin-bottom:22px}
+.hero .btn{background:#fff;color:var(--primary-deep)}
+.hero .btn:hover{background:var(--accent);color:#fff}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;align-items:center;gap:16px}
+.stat-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.stat-icon svg{width:22px;height:22px}
+.stat-icon.blue{background:var(--primary-soft);color:var(--primary)}
+.stat-icon.amber{background:var(--accent-soft);color:var(--accent)}
+.stat-icon.green{background:var(--success-soft);color:var(--success)}
+.stat-icon.red{background:var(--danger-soft);color:var(--danger)}
+.stat-num{font-family:var(--font-serif);font-size:26px;font-weight:900;line-height:1.2}
+.stat-label{font-size:12px;color:var(--ink-2)}
+.home-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+.goal-card{display:flex;flex-direction:column;gap:16px}
+.goal-head{display:flex;justify-content:space-between;align-items:baseline}
+.goal-head h3{font-family:var(--font-serif);font-size:18px;font-weight:700}
+.goal-head span{font-size:13px;color:var(--ink-2)}
+.ring-wrap{display:flex;align-items:center;gap:24px}
+.ring-box{position:relative;width:120px;height:120px;flex-shrink:0}
+.ring-box svg{width:120px;height:120px;transform:rotate(-90deg)}
+.ring-box .ring-bg{fill:none;stroke:var(--surface-2);stroke-width:10}
+.ring-box .ring-fg{fill:none;stroke:var(--primary);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-center b{font-family:var(--font-serif);font-size:26px;font-weight:900}
+.ring-center span{font-size:11px;color:var(--ink-2)}
+.goal-bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.goal-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));border-radius:99px;transition:width .5s ease}
+.goal-tip{font-size:13px;color:var(--ink-2)}
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.entry-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:22px;display:flex;flex-direction:column;gap:10px;transition:.2s;cursor:pointer;text-align:left;
+}
+.entry-card:hover{transform:translateY(-3px);border-color:var(--primary);box-shadow:0 14px 34px rgba(30,60,130,.14)}
+.entry-card .entry-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:2px}
+.entry-card .entry-icon svg{width:21px;height:21px}
+.entry-card h3{font-family:var(--font-serif);font-size:17px;font-weight:700}
+.entry-card p{font-size:13px;color:var(--ink-2);flex:1}
+.entry-card .entry-more{font-size:13px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:4px}
+.countdown-card{display:flex;flex-direction:column;gap:14px}
+.countdown-num{font-family:var(--font-serif);font-size:44px;font-weight:900;color:var(--primary);line-height:1}
+.countdown-label{font-size:13px;color:var(--ink-2)}
+.countdown-note{font-size:12px;color:var(--ink-2);background:var(--accent-soft);border-radius:10px;padding:10px 12px}
+
+/* ===== 单词卡片 ===== */
+.vocab-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.vocab-progress{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2)}
+.vocab-progress .bar{width:160px;height:7px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.vocab-progress .bar i{display:block;height:100%;background:var(--primary);border-radius:99px;transition:width .3s}
+.card-scene{perspective:1200px;max-width:560px;margin:0 auto}
+.flip-card{
+  position:relative;width:100%;height:330px;transform-style:preserve-3d;
+  transition:transform .6s cubic-bezier(.4,.2,.2,1);cursor:pointer;
+}
+.flip-card.flipped{transform:rotateY(180deg)}
+.flip-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px;text-align:center;
+  background:var(--surface);
+}
+.flip-face.front .word-main{font-family:var(--font-serif);font-size:44px;font-weight:900;color:var(--primary)}
+.flip-face.front .word-phon{font-size:16px;color:var(--ink-2);letter-spacing:.5px}
+.flip-face.front .flip-hint{position:absolute;bottom:18px;font-size:12px;color:var(--ink-2);opacity:.7;display:flex;align-items:center;gap:6px}
+.flip-face.back{transform:rotateY(180deg);background:linear-gradient(160deg,var(--surface),var(--primary-soft))}
+.flip-face.back .word-meaning{font-size:22px;font-weight:700;font-family:var(--font-serif)}
+.flip-face.back .word-def{font-size:15px;color:var(--ink-2)}
+.flip-face.back .word-example{font-size:14px;font-style:italic;color:var(--ink);max-width:380px;background:var(--surface);border-left:3px solid var(--accent);padding:10px 14px;border-radius:8px;text-align:left}
+.flip-face.back .word-example-cn{font-size:13px;color:var(--ink-2)}
+.flip-face.back .word-tag{position:absolute;top:16px;right:16px;font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:99px}
+.vocab-actions{display:flex;justify-content:center;gap:12px;margin-top:22px;flex-wrap:wrap}
+.wordbook-hint{text-align:center;font-size:13px;color:var(--ink-2);margin-top:12px}
+
+/* ===== 阅读 / 真题通用 ===== */
+.passage-box{
+  background:var(--surface-2);border-radius:12px;padding:20px;line-height:1.9;font-size:15px;
+  white-space:pre-line;
+}
+.q-list{display:flex;flex-direction:column;gap:22px;margin-top:22px}
+.q-item{padding:18px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.q-item .q-text{font-weight:700;margin-bottom:12px;font-size:15px}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+.q-opts label{
+  display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border:1.5px solid var(--line);
+  border-radius:10px;cursor:pointer;transition:.15s;font-size:14px;
+}
+.q-opts label:hover{border-color:var(--primary);background:var(--primary-soft)}
+.q-opts input[type="radio"]{accent-color:var(--primary);margin-top:4px;width:16px;height:16px}
+.q-item.answered label.correct{border-color:var(--success);background:var(--success-soft)}
+.q-item.answered label.wrong{border-color:var(--danger);background:var(--danger-soft)}
+.q-item.answered label{cursor:default;opacity:.75}
+.q-item.answered label.correct,.q-item.answered label.wrong{opacity:1}
+.q-explanation{
+  margin-top:12px;padding:12px 14px;border-radius:10px;font-size:14px;background:var(--accent-soft);
+  display:none;
+}
+.q-explanation.show{display:block}
+.quiz-actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+.quiz-result{
+  margin-top:20px;padding:18px;border-radius:12px;text-align:center;
+  background:linear-gradient(135deg,var(--primary-soft),var(--surface));border:1px solid var(--primary);
+  display:none;
+}
+.quiz-result.show{display:block}
+.quiz-result .score{font-family:var(--font-serif);font-size:38px;font-weight:900;color:var(--primary)}
+.quiz-result .score-sub{font-size:14px;color:var(--ink-2);margin-top:4px}
+
+/* ===== 选词填空 ===== */
+.cloze-passage{background:var(--surface-2);border-radius:12px;padding:22px;font-size:15px;line-height:2.2}
+.cloze-passage select{
+  padding:4px 10px;border-radius:8px;border:1.5px solid var(--primary);background:var(--surface);
+  color:var(--primary);font-weight:700;font-size:14px;cursor:pointer;min-width:110px;max-width:180px;
+}
+.cloze-passage select.correct-choice{border-color:var(--success);color:var(--success);background:var(--success-soft)}
+.cloze-passage select.wrong-choice{border-color:var(--danger);color:var(--danger);background:var(--danger-soft)}
+.cloze-words{
+  margin-top:16px;padding:14px 18px;border-radius:10px;background:var(--surface);border:1px dashed var(--line);
+  font-size:13px;color:var(--ink-2);display:flex;flex-wrap:wrap;gap:6px 14px;
+}
+.cloze-words b{color:var(--primary);font-weight:700}
+
+/* ===== 写作翻译 ===== */
+.tab-bar{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.tab-btn{
+  padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;color:var(--ink-2);
+  background:var(--surface-2);transition:.2s;
+}
+.tab-btn.active{background:var(--primary);color:#fff}
+.essay-card{margin-bottom:16px}
+.essay-card .essay-title{font-family:var(--font-serif);font-size:17px;font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.essay-card .essay-title .tag{font-size:11px;font-weight:700;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:99px;font-family:var(--font-sans)}
+.essay-body{font-size:14.5px;line-height:2;white-space:pre-line;color:var(--ink)}
+.essay-body .essay-cn{font-size:13px;color:var(--ink-2);margin-top:8px;padding-top:10px;border-top:1px dashed var(--line)}
+.draft-box textarea{
+  width:100%;min-height:180px;padding:16px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--surface);font-size:14.5px;line-height:1.9;resize:vertical;
+}
+.draft-box textarea:focus{outline:none;border-color:var(--primary)}
+.draft-meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--ink-2);flex-wrap:wrap;gap:8px}
+.draft-saved{color:var(--success);display:none}
+.draft-saved.show{display:inline}
+
+/* ===== 错题本 ===== */
+.mistake-empty{
+  text-align:center;padding:60px 20px;color:var(--ink-2);
+}
+.mistake-empty svg{width:56px;height:56px;opacity:.35;margin-bottom:14px}
+.mistake-empty h3{font-family:var(--font-serif);font-size:18px;color:var(--ink);margin-bottom:6px}
+.mistake-card{border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px;background:var(--surface)}
+.mistake-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.mistake-tag{font-size:12px;font-weight:700;padding:4px 12px;border-radius:99px;background:var(--danger-soft);color:var(--danger)}
+.mistake-src{font-size:12px;color:var(--ink-2)}
+.mistake-q{font-weight:700;font-size:15px;margin-bottom:12px}
+.ans-row{display:flex;gap:10px;flex-wrap:wrap;font-size:14px;margin-bottom:6px}
+.ans-row .yours{color:var(--danger);font-weight:700}
+.ans-row .correct{color:var(--success);font-weight:700}
+.mistake-exp{font-size:13.5px;color:var(--ink-2);background:var(--surface-2);border-radius:10px;padding:12px 14px;margin-top:10px}
+.mistake-actions{display:flex;gap:8px;margin-top:14px}
+
+/* ===== 页脚 ===== */
+.app-footer{
+  border-top:1px solid var(--line);padding:26px 20px;text-align:center;
+  font-size:13px;color:var(--ink-2);background:var(--surface);
+}
+.app-footer b{font-family:var(--font-serif);color:var(--primary)}
+
+/* ===== 首页 7 天打卡 ===== */
+.week-strip{margin-bottom:24px}
+.week-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.week-head h3{font-family:var(--font-serif);font-size:16px;font-weight:700}
+.week-cells{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.day-cell{
+  border-radius:12px;background:var(--surface-2);padding:12px 6px;text-align:center;
+  border:1px solid transparent;transition:.2s;
+}
+.day-cell .d-label{font-size:11px;color:var(--ink-2);margin-bottom:4px}
+.day-cell .d-num{font-family:var(--font-serif);font-size:16px;font-weight:700;color:var(--ink-2)}
+.day-cell.done{background:var(--success-soft);border-color:var(--success)}
+.day-cell.done .d-label{color:var(--success)}
+.day-cell.done .d-num{color:var(--success)}
+.day-cell.today{border-color:var(--primary)}
+
+/* ===== 段落匹配 ===== */
+.match-para{
+  display:flex;gap:12px;padding:12px 14px;border-left:3px solid var(--primary);
+  background:var(--surface-2);border-radius:10px;margin-bottom:10px;font-size:14px;line-height:1.8;
+}
+.match-para .para-key{
+  flex-shrink:0;width:28px;height:28px;border-radius:8px;background:var(--primary);
+  color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;
+}
+.match-hint{
+  margin:14px 0 8px;font-size:13px;color:var(--ink-2);background:var(--accent-soft);
+  padding:10px 14px;border-radius:10px;
+}
+
+/* ===== 听力 ===== */
+.listen-card{border:1px dashed var(--primary);background:var(--surface);border-radius:14px;padding:20px;margin-bottom:16px}
+.listen-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.listen-scene{
+  display:none;background:var(--surface-2);border-radius:10px;padding:14px;font-size:13.5px;
+  color:var(--ink-2);line-height:1.9;margin-bottom:14px;white-space:pre-line;
+}
+.listen-scene.show{display:block}
+.listen-playing{color:var(--primary);font-weight:700}
+
+/* ===== 生词本列表 ===== */
+.wb-item{
+  display:flex;align-items:center;gap:16px;padding:16px 18px;border:1px solid var(--line);
+  border-radius:14px;margin-bottom:12px;background:var(--surface);transition:.2s;
+}
+.wb-item:hover{border-color:var(--primary)}
+.wb-main{flex:1;min-width:0}
+.wb-word{font-family:var(--font-serif);font-size:19px;font-weight:900;color:var(--primary)}
+.wb-phon{font-size:13px;color:var(--ink-2);margin-left:10px}
+.wb-def{font-size:14px;margin-top:3px}
+.wb-ex{font-size:12.5px;color:var(--ink-2);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wb-actions{display:flex;gap:8px;flex-shrink:0}
+
+/* ===== 测验结果 ===== */
+.quiz-summary{
+  margin-top:18px;padding:18px;border-radius:12px;text-align:center;
+  background:linear-gradient(135deg,var(--primary-soft),var(--surface));border:1px solid var(--primary);
+}
+.quiz-summary .q-score{font-family:var(--font-serif);font-size:34px;font-weight:900;color:var(--primary)}
+
+/* ===== 响应式 ===== */
+@media (max-width:900px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .home-grid{grid-template-columns:1fr}
+}
+@media (max-width:768px){
+  .header-inner{height:60px}
+  .main-nav{
+    position:fixed;top:60px;right:0;width:min(300px,80vw);height:calc(100vh - 60px);
+    background:var(--surface);border-left:1px solid var(--line);
+    transform:translateX(100%);transition:transform .3s ease;z-index:60;
+    box-shadow:-10px 0 30px rgba(0,0,0,.12);
+  }
+  .main-nav.open{transform:none}
+  .main-nav ul{flex-direction:column;padding:16px;gap:6px}
+  .main-nav a{padding:13px 16px;font-size:15px}
+  #hamburger{display:flex}
+  .hero{padding:28px 22px}
+  .hero h1{font-size:26px}
+  .ring-wrap{flex-direction:column;align-items:flex-start}
+  .entry-grid{grid-template-columns:1fr}
+  .card-scene{max-width:100%}
+  .flip-card{height:300px}
+  .flip-face.front .word-main{font-size:36px}
+  .flip-face.back .word-meaning{font-size:19px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<header class="app-header">
+  <div class="header-inner">
+    <a class="brand" href="#home" data-route-link="home">
+      <span class="brand-badge">C4</span>
+      <span>四级备考站</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <ul>
+        <li><a href="#home" data-route-link="home">首页</a></li>
+        <li><a href="#vocab" data-route-link="vocab">词汇</a></li>
+        <li><a href="#reading" data-route-link="reading">阅读</a></li>
+        <li><a href="#writing" data-route-link="writing">写作翻译</a></li>
+        <li><a href="#exam" data-route-link="exam">真题模拟</a></li>
+        <li><a href="#mistakes" data-route-link="mistakes">错题本</a></li>
+        <li><a href="#wordbook" data-route-link="wordbook">生词本</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeBtn" title="切换深浅色主题" aria-label="切换主题">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </button>
+      <button class="icon-btn" id="hamburger" aria-label="打开菜单">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="app-main">
+
+  <!-- ===== 视图:首页 ===== -->
+  <section class="view" data-route="home">
+    <div class="hero">
+      <h1>四级备考，从今天开始</h1>
+      <p>每天背一点单词、做一篇阅读，错题自动收进错题本。稳扎稳打，一次通过。</p>
+      <button class="btn" data-route-link="vocab" style="border:none">开始背单词
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div><div class="stat-num" id="statToday">0</div><div class="stat-label">今日已学单词</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div><div class="stat-num" id="statStreak">0</div><div class="stat-label">连续学习天数</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+        <div><div class="stat-num" id="statBook">0</div><div class="stat-label">生词本</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <div><div class="stat-num" id="statWrong">0</div><div class="stat-label">待复习错题</div></div>
+      </div>
+    </div>
+
+    <div class="card week-strip">
+      <div class="week-head">
+        <h3>最近 7 天打卡</h3>
+        <span id="weekStripLabel" style="font-size:13px;color:var(--ink-2)">--</span>
+      </div>
+      <div id="weekStrip" class="week-cells"></div>
+    </div>
+
+    <div class="home-grid">
+      <div class="card goal-card">
+        <div class="goal-head">
+          <h3>本周学习目标</h3>
+          <span id="goalMeta">0 / 50 词</span>
+        </div>
+        <div class="ring-wrap">
+          <div class="ring-box">
+            <svg viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="52"></circle>
+              <circle class="ring-fg" id="goalRing" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"></circle>
+            </svg>
+            <div class="ring-center"><b id="goalPct">0%</b><span>完成度</span></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px"><span>本周进度</span><b id="goalBarText">0 / 50</b></div>
+              <div class="goal-bar"><i id="goalBarFill" style="width:0%"></i></div>
+            </div>
+            <p class="goal-tip">每翻开一张单词卡背面，就计入 1 个学习量。坚持每天 20 个，一周轻松完成目标。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card countdown-card">
+        <h3 style="font-family:var(--font-serif);font-size:18px;font-weight:700">备考倒计时</h3>
+        <div>
+          <div class="countdown-num" id="countdownDays">--</div>
+          <div class="countdown-label">距离下一次四级笔试（预计 2026-12-12）</div>
+        </div>
+        <div class="countdown-note">考试日期以官方通知为准。倒计时按预计日期计算，备考节奏请以学校报名通知为准。</div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px">
+      <h2 class="section-title">学习板块</h2>
+      <p class="section-sub">六大模块，覆盖四级备考全流程</p>
+      <div class="entry-grid">
+        <button class="entry-card" data-route-link="vocab">
+          <span class="entry-icon stat-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+          <h3>四级词汇</h3>
+          <p>单词卡点击翻转，音标、释义、例句一应俱全，不会的词加入生词本反复看。</p>
+          <span class="entry-more">去背单词 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </button>
+        <button class="entry-card" data-route-link="reading">
+          <span class="entry-icon stat-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+          <h3>阅读练习</h3>
+          <p>四级难度短文配单选，做完立即看解析，错题自动进错题本。</p>
+          <span class="entry-more">去刷阅读 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </button>
+        <button class="entry-card" data-route-link="writing">
+          <span class="entry-icon stat-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+          <h3>写作翻译</h3>
+          <p>四级高频写作范文与翻译参考，作文草稿自动保存在本地。</p>
+          <span class="entry-more">看范文 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </button>
+        <button class="entry-card" data-route-link="exam">
+          <span class="entry-icon stat-icon red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13l2 2 4-4"/></svg></span>
+          <h3>真题模拟</h3>
+          <p>选词填空 + 仔细阅读，模拟真实答题，交卷即出分，错题自动收录。</p>
+          <span class="entry-more">去模拟 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 视图:词汇 ===== -->
+  <section class="view" data-route="vocab">
+    <h2 class="section-title">四级核心词汇</h2>
+    <p class="section-sub">学习模式翻卡片背词，测验模式随机抽题自测</p>
+
+    <div class="tab-bar" style="margin-bottom:22px">
+      <button class="tab-btn active" data-vtab="learn">单词学习</button>
+      <button class="tab-btn" data-vtab="quiz">单词测验</button>
+    </div>
+
+    <div id="vtab-learn">
+    <div class="vocab-toolbar">
+      <div class="vocab-progress">
+        <span id="vocabPos">1 / 100</span>
+        <div class="bar"><i id="vocabBar" style="width:1%"></i></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm secondary" id="shuffleBtn">随机换词</button>
+      </div>
+    </div>
+
+    <div class="card-scene">
+      <div class="flip-card" id="flipCard">
+        <div class="flip-face front">
+          <div class="word-main" id="wWord">approach</div>
+          <div class="word-phon" id="wPhon">/əˈprəʊtʃ/</div>
+          <span class="flip-hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+            点击翻面查看释义
+          </span>
+        </div>
+        <div class="flip-face back">
+          <span class="word-tag" id="wPos">v. / n.</span>
+          <div class="word-main" id="wWordBack" style="color:var(--primary)">approach</div>
+          <div class="word-meaning" id="wMeaning">接近；方法</div>
+          <div class="word-def" id="wDef">v. 接近，处理　n. 方法</div>
+          <div class="word-example" id="wEx">We need a new approach to solve the problem.</div>
+          <div class="word-example-cn" id="wExCn">我们需要一种新方法来解决这个问题。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vocab-actions">
+      <button class="btn ghost" id="prevBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        上一个
+      </button>
+      <button class="btn" id="bookBtn">加入生词本</button>
+      <button class="btn ghost" id="nextBtn">
+        下一个
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <p class="wordbook-hint" id="bookHint">生词本当前 <b id="bookCount">0</b> 个词 · 生词会保留在本机浏览器中</p>
+    </div>
+
+    <div id="vtab-quiz" style="display:none">
+      <div id="quizArea">
+        <div class="card" style="text-align:center;padding:50px 20px">
+          <h3 style="font-family:var(--font-serif);font-size:18px;margin-bottom:10px">单词测验</h3>
+          <p style="font-size:14px;color:var(--ink-2);margin-bottom:20px">从 100 个核心词里随机抽 10 题，选出正确的中文释义。答错的词会自动收进错题本。</p>
+          <button class="btn" id="startQuizBtn">开始测验</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 视图:阅读 ===== -->
+  <section class="view" data-route="reading">
+    <h2 class="section-title">阅读练习</h2>
+    <p class="section-sub">仔细阅读专项训练 · 做完交卷看解析，错题自动进入错题本</p>
+    <div id="readingArea"></div>
+  </section>
+
+  <!-- ===== 视图:写作翻译 ===== -->
+  <section class="view" data-route="writing">
+    <h2 class="section-title">写作翻译</h2>
+    <p class="section-sub">四级高频话题范文与翻译参考，作文草稿自动保存在本机</p>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="writing-pane">写作范文</button>
+      <button class="tab-btn" data-tab="trans-pane">翻译参考</button>
+      <button class="tab-btn" data-tab="draft-pane">我的作文草稿</button>
+    </div>
+
+    <div id="writing-pane" class="pane">
+      <div class="card essay-card">
+        <div class="essay-title">
+          <span>范文一：The Importance of Lifelong Learning</span>
+          <span class="tag">议论文 · 高频</span>
+        </div>
+        <div class="essay-body">Lifelong learning means the continuous pursuit of knowledge throughout one's life. In today's rapidly changing world, it has become more important than ever.
+
+First of all, lifelong learning keeps us competitive in the job market. New technologies appear every day, and workers who fail to update their skills may be left behind. By learning new things, we can adapt to the changing demands of our careers.
+
+Secondly, learning enriches our inner world. Reading books, taking online courses and exploring new hobbies all broaden our horizons and make life more meaningful. It is a good way to relax and grow at the same time.
+
+In conclusion, we should view learning not as a task that ends with graduation, but as a lifelong habit. Only by keeping learning can we keep up with the times and live a fuller life.</div>
+      </div>
+      <div class="card essay-card">
+        <div class="essay-title">
+          <span>范文二：Should College Students Take Part-time Jobs</span>
+          <span class="tag">议论文 · 高频</span>
+        </div>
+        <div class="essay-body">Whether college students should take part-time jobs has been widely discussed. In my opinion, doing part-time work is beneficial if it is well managed.
+
+On the one hand, part-time jobs offer students a chance to gain practical experience. Working in a restaurant or doing tutoring helps them learn how to communicate with different people and how to manage their time efficiently. Besides, the income can ease the financial burden on their families.
+
+On the other hand, we cannot ignore the risks. If students spend too much time on work, their study may be affected. Some students even feel tired and stressed because they fail to balance work and study.
+
+Therefore, I believe students should choose part-time jobs carefully and keep a proper balance between work and study. Only in this way can they benefit from the experience without hurting their academic performance.</div>
+      </div>
+    </div>
+
+    <div id="trans-pane" class="pane" style="display:none">
+      <div class="card essay-card">
+        <div class="essay-title"><span>翻译一：中国茶文化</span><span class="tag">传统文化</span></div>
+        <div class="essay-body">中国是茶的故乡，饮茶在中国有着悠久的历史。茶不仅是一种饮品，更是一种文化。中国人喜欢在闲暇时与朋友一起品茶、聊天。如今，中国茶已经走向世界，受到越来越多外国朋友的喜爱。
+<div class="essay-cn">参考译文：China is the hometown of tea, and drinking tea has a long history in China. Tea is not only a drink but also a kind of culture. Chinese people enjoy tasting tea and chatting with friends in their spare time. Today, Chinese tea has gone to the world and is loved by more and more foreign friends.</div></div>
+      </div>
+      <div class="card essay-card">
+        <div class="essay-title"><span>翻译二：大学生活</span><span class="tag">校园生活</span></div>
+        <div class="essay-body">大学生活是人生中一段宝贵的时光。在这里，我们不仅学习专业知识，还结交了来自全国各地的朋友。图书馆、操场和宿舍都留下了我们的美好回忆。毕业后，我们会带着这些经历走向更广阔的天地。
+<div class="essay-cn">参考译文：College life is a precious period in one's life. Here, we not only learn professional knowledge but also make friends from all over the country. The library, the playground and the dormitory are all filled with our beautiful memories. After graduation, we will carry these experiences into the wider world.</div></div>
+      </div>
+    </div>
+
+    <div id="draft-pane" class="pane" style="display:none">
+      <div class="card draft-box">
+        <h3 style="font-family:var(--font-serif);font-size:17px;font-weight:700;margin-bottom:12px">我的作文草稿</h3>
+        <p style="font-size:13px;color:var(--ink-2);margin-bottom:10px">把作文写在这里，内容会自动保存在本机浏览器。需要批改时，把全文复制到豆包对话框提问即可。</p>
+        <textarea id="draftArea" placeholder="在这里开始写你的四级作文……"></textarea>
+        <div class="draft-meta">
+          <span>建议字数：四级作文约 120–180 词</span>
+          <span class="draft-saved" id="draftSaved">已自动保存</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 视图:真题模拟 ===== -->
+  <section class="view" data-route="exam">
+    <h2 class="section-title">真题模拟</h2>
+    <p class="section-sub">模拟卷 · 选词填空 + 仔细阅读，交卷自动评分，错题进入错题本</p>
+    <div id="examArea"></div>
+  </section>
+
+  <!-- ===== 视图:错题本 ===== -->
+  <section class="view" data-route="mistakes">
+    <h2 class="section-title">错题本</h2>
+    <p class="section-sub">做错的题目自动收集在这里，考前集中复习</p>
+    <div id="mistakeArea"></div>
+  </section>
+
+  <!-- ===== 视图:生词本 ===== -->
+  <section class="view" data-route="wordbook">
+    <h2 class="section-title">生词本</h2>
+    <p class="section-sub">把不会的单词收进来反复过，直到眼熟为止</p>
+    <div id="wordbookArea"></div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <b>四级备考站</b> · 数据仅保存在本机浏览器，清除浏览器数据前请自行备份
+</footer>
+
+<script>
+"use strict";
+
+/* ===== 数据:四级核心词汇 ===== */
+var WORDS = [
+  {w:"approach", p:"/əˈprəʊtʃ/", pos:"v. / n.", mean:"接近；方法", def:"v. 接近，处理　n. 方法", ex:"We need a new approach to solve the problem.", cn:"我们需要一种新方法来解决这个问题。"},
+  {w:"available", p:"/əˈveɪləbl/", pos:"adj.", mean:"可获得的", def:"adj. 可获得的；有空的", ex:"Tickets for the concert are still available.", cn:"音乐会的门票仍然可以买到。"},
+  {w:"benefit", p:"/ˈbenɪfɪt/", pos:"n. / v.", mean:"益处；有益于", def:"n. 益处，好处　v. 有益于", ex:"Reading widely benefits both your mind and your writing.", cn:"广泛阅读对你的思维和写作都有好处。"},
+  {w:"challenge", p:"/ˈtʃælɪndʒ/", pos:"n. / v.", mean:"挑战", def:"n. 挑战　v. 向……挑战", ex:"Learning a new language is a real challenge for me.", cn:"学习一门新语言对我来说是真正的挑战。"},
+  {w:"communicate", p:"/kəˈmjuːnɪkeɪt/", pos:"v.", mean:"交流；传达", def:"v. 交流，沟通；传达", ex:"We communicate with each other mainly through email.", cn:"我们主要通过电子邮件相互交流。"},
+  {w:"consider", p:"/kənˈsɪdə(r)/", pos:"v.", mean:"考虑；认为", def:"v. 考虑；认为", ex:"You should consider all the options before making a decision.", cn:"在做决定之前你应该考虑所有选项。"},
+  {w:"develop", p:"/dɪˈveləp/", pos:"v.", mean:"发展；培养", def:"v. 发展，开发；培养", ex:"College is a good place to develop your independence.", cn:"大学是培养独立能力的好地方。"},
+  {w:"efficient", p:"/ɪˈfɪʃnt/", pos:"adj.", mean:"高效的", def:"adj. 高效的，效率高的", ex:"Taking notes in class makes my study more efficient.", cn:"上课做笔记使我的学习更高效。"},
+  {w:"environment", p:"/ɪnˈvaɪrənmənt/", pos:"n.", mean:"环境", def:"n. 环境", ex:"A quiet environment helps students focus on their work.", cn:"安静的环境有助于学生集中注意力。"},
+  {w:"experience", p:"/ɪkˈspɪəriəns/", pos:"n. / v.", mean:"经验；经历", def:"n. 经验；经历　v. 经历，体验", ex:"Part-time jobs give students valuable working experience.", cn:"兼职工作让学生获得宝贵的工作经验。"},
+  {w:"focus", p:"/ˈfəʊkəs/", pos:"v. / n.", mean:"集中；焦点", def:"v. 集中（注意力）　n. 焦点", ex:"Try to focus on one task at a time.", cn:"试着一次专注于一项任务。"},
+  {w:"graduate", p:"/ˈɡrædʒuət/", pos:"v. / n.", mean:"毕业；毕业生", def:"v. 毕业　n. 毕业生", ex:"She plans to graduate from university next year.", cn:"她计划明年大学毕业。"},
+  {w:"improve", p:"/ɪmˈpruːv/", pos:"v.", mean:"改进；提高", def:"v. 改进，改善；提高", ex:"Reading English every day will improve your vocabulary.", cn:"每天读英语会提高你的词汇量。"},
+  {w:"influence", p:"/ˈɪnfluəns/", pos:"n. / v.", mean:"影响", def:"n. 影响　v. 影响", ex:"Teachers have a great influence on their students.", cn:"老师对学生有很大的影响。"},
+  {w:"maintain", p:"/meɪnˈteɪn/", pos:"v.", mean:"维持；保持", def:"v. 维持，保持；保养", ex:"It is important to maintain a balance between study and rest.", cn:"保持学习和休息之间的平衡很重要。"},
+  {w:"necessary", p:"/ˈnesəsəri/", pos:"adj.", mean:"必要的", def:"adj. 必要的，必需的", ex:"Sleep is necessary for good health.", cn:"睡眠对健康是必要的。"},
+  {w:"obtain", p:"/əbˈteɪn/", pos:"v.", mean:"获得", def:"v. 获得，得到", ex:"You can obtain useful information from the library.", cn:"你可以从图书馆获得有用的信息。"},
+  {w:"opportunity", p:"/ˌɒpəˈtjuːnəti/", pos:"n.", mean:"机会", def:"n. 机会，时机", ex:"Studying abroad is a great opportunity to see the world.", cn:"出国留学是看世界的好机会。"},
+  {w:"positive", p:"/ˈpɒzətɪv/", pos:"adj.", mean:"积极的", def:"adj. 积极的；肯定的", ex:"A positive attitude helps you get through difficult times.", cn:"积极的态度帮助你度过困难时期。"},
+  {w:"pressure", p:"/ˈpreʃə(r)/", pos:"n.", mean:"压力", def:"n. 压力", ex:"Students often feel pressure before the final exams.", cn:"学生在期末考试前经常感到压力。"},
+  {w:"quality", p:"/ˈkwɒləti/", pos:"n.", mean:"质量；品质", def:"n. 质量；品质，素质", ex:"Practice is the key to improving the quality of your writing.", cn:"练习是提高写作质量的关键。"},
+  {w:"reduce", p:"/rɪˈdjuːs/", pos:"v.", mean:"减少", def:"v. 减少，降低", ex:"Exercising regularly can help reduce stress.", cn:"经常锻炼有助于减轻压力。"},
+  {w:"responsible", p:"/rɪˈspɒnsəbl/", pos:"adj.", mean:"负责的", def:"adj. 负责的；有责任心的", ex:"As adults, we should be responsible for our own choices.", cn:"作为成年人，我们应该对自己的选择负责。"},
+  {w:"schedule", p:"/ˈʃedjuːl/", pos:"n. / v.", mean:"时间表；安排", def:"n. 时间表　v. 安排", ex:"Making a study schedule helps you manage your time.", cn:"制定学习计划表有助于你管理时间。"},
+  {w:"solution", p:"/səˈluːʃn/", pos:"n.", mean:"解决办法", def:"n. 解决办法；答案", ex:"There is no simple solution to the problem of pollution.", cn:"污染问题没有简单的解决办法。"},
+  {w:"various", p:"/ˈveəriəs/", pos:"adj.", mean:"各种各样的", def:"adj. 各种各样的，不同的", ex:"The course covers various aspects of English learning.", cn:"这门课程涵盖英语学习的各个方面。"},
+  {w:"achieve", p:"/əˈtʃiːv/", pos:"v.", mean:"实现；达到", def:"v. 实现，达到；取得", ex:"You can achieve your goals if you keep working hard.", cn:"如果你不断努力，就能实现目标。"},
+  {w:"attitude", p:"/ˈætɪtjuːd/", pos:"n.", mean:"态度", def:"n. 态度，看法", ex:"Your attitude towards failure matters more than the failure itself.", cn:"你对失败的态度比失败本身更重要。"},
+  {w:"balance", p:"/ˈbæləns/", pos:"n. / v.", mean:"平衡；使平衡", def:"n. 平衡　v. 使平衡", ex:"It takes time to balance study and social life.", cn:"平衡学习和社交生活需要时间。"},
+  {w:"confident", p:"/ˈkɒnfɪdənt/", pos:"adj.", mean:"自信的", def:"adj. 自信的；确信的", ex:"Practice makes you more confident when speaking English.", cn:"练习使你在说英语时更自信。"},
+  {w:"ability", p:"/əˈbɪləti/", pos:"n.", mean:"能力", def:"n. 能力，才能", ex:"She has the ability to solve problems quickly.", cn:"她有快速解决问题的能力。"},
+  {w:"accurate", p:"/ˈækjərət/", pos:"adj.", mean:"准确的", def:"adj. 准确的，精确的", ex:"The report gives an accurate description of the situation.", cn:"这份报告准确描述了情况。"},
+  {w:"activity", p:"/ækˈtɪvəti/", pos:"n.", mean:"活动", def:"n. 活动", ex:"Outdoor activities are good for your health.", cn:"户外活动对健康有好处。"},
+  {w:"advantage", p:"/ədˈvɑːntɪdʒ/", pos:"n.", mean:"优势", def:"n. 优势，有利条件", ex:"Speaking two languages gives you an advantage.", cn:"会说两种语言给你带来优势。"},
+  {w:"affect", p:"/əˈfekt/", pos:"v.", mean:"影响", def:"v. 影响", ex:"Lack of sleep can affect your memory.", cn:"睡眠不足会影响记忆力。"},
+  {w:"afford", p:"/əˈfɔːd/", pos:"v.", mean:"负担得起", def:"v. 负担得起；买得起", ex:"We cannot afford to waste so much time.", cn:"我们浪费不起这么多时间。"},
+  {w:"ancient", p:"/ˈeɪnʃənt/", pos:"adj.", mean:"古代的", def:"adj. 古代的，古老的", ex:"The ancient city attracts thousands of tourists every year.", cn:"这座古城每年吸引成千上万的游客。"},
+  {w:"announce", p:"/əˈnaʊns/", pos:"v.", mean:"宣布", def:"v. 宣布，宣告", ex:"The school will announce the exam results tomorrow.", cn:"学校明天将公布考试成绩。"},
+  {w:"anxious", p:"/ˈæŋkʃəs/", pos:"adj.", mean:"焦虑的", def:"adj. 焦虑的，担心的", ex:"She felt anxious before the job interview.", cn:"面试前她感到焦虑。"},
+  {w:"appreciate", p:"/əˈpriːʃieɪt/", pos:"v.", mean:"感激；欣赏", def:"v. 感激；欣赏，重视", ex:"I really appreciate your help with my homework.", cn:"我非常感激你帮我做作业。"},
+  {w:"argue", p:"/ˈɑːɡjuː/", pos:"v.", mean:"争论", def:"v. 争论，争辩", ex:"They often argue about small things.", cn:"他们经常为小事争论。"},
+  {w:"attract", p:"/əˈtrækt/", pos:"v.", mean:"吸引", def:"v. 吸引", ex:"The exhibition attracted a large number of visitors.", cn:"这次展览吸引了大批参观者。"},
+  {w:"avoid", p:"/əˈvɔɪd/", pos:"v.", mean:"避免", def:"v. 避免，避开", ex:"You should avoid making the same mistake again.", cn:"你应该避免再犯同样的错误。"},
+  {w:"aware", p:"/əˈweə(r)/", pos:"adj.", mean:"意识到的", def:"adj. 意识到的，知道的", ex:"Students should be aware of the importance of study.", cn:"学生应该意识到学习的重要性。"},
+  {w:"behavior", p:"/bɪˈheɪvjə(r)/", pos:"n.", mean:"行为", def:"n. 行为，举止", ex:"His behavior in class has improved a lot.", cn:"他在课堂上的表现改善了很多。"},
+  {w:"borrow", p:"/ˈbɒrəʊ/", pos:"v.", mean:"借入", def:"v. 借入，借用", ex:"May I borrow your dictionary for a while?", cn:"我可以借你的词典用一下吗？"},
+  {w:"career", p:"/kəˈrɪə(r)/", pos:"n.", mean:"职业", def:"n. 职业，事业", ex:"Teaching is a rewarding career.", cn:"教书是一份有回报的职业。"},
+  {w:"compare", p:"/kəmˈpeə(r)/", pos:"v.", mean:"比较", def:"v. 比较，对比", ex:"It is not fair to compare yourself with others.", cn:"把自己和别人比较是不公平的。"},
+  {w:"complain", p:"/kəmˈpleɪn/", pos:"v.", mean:"抱怨", def:"v. 抱怨，投诉", ex:"He complained about the noise in the dormitory.", cn:"他抱怨宿舍里的噪音。"},
+  {w:"concern", p:"/kənˈsɜːn/", pos:"n. / v.", mean:"担忧；关心", def:"n. 担忧；关心的事　v. 使担忧", ex:"Parents have great concern for their children's future.", cn:"父母非常关心孩子的未来。"},
+  {w:"condition", p:"/kənˈdɪʃn/", pos:"n.", mean:"状况；条件", def:"n. 状况，状态；条件", ex:"The old house is still in good condition.", cn:"这栋老房子状况仍然良好。"},
+  {w:"constant", p:"/ˈkɒnstənt/", pos:"adj.", mean:"持续的", def:"adj. 持续的，不断的；不变的", ex:"Constant practice is the key to success.", cn:"不断的练习是成功的关键。"},
+  {w:"convenient", p:"/kənˈviːniənt/", pos:"adj.", mean:"方便的", def:"adj. 方便的，便利的", ex:"Online shopping is convenient for young people.", cn:"网上购物对年轻人来说很方便。"},
+  {w:"courage", p:"/ˈkʌrɪdʒ/", pos:"n.", mean:"勇气", def:"n. 勇气，胆量", ex:"It takes courage to speak in front of the class.", cn:"在全班面前发言需要勇气。"},
+  {w:"creative", p:"/kriˈeɪtɪv/", pos:"adj.", mean:"有创造力的", def:"adj. 有创造力的", ex:"The course encourages students to think creatively.", cn:"这门课程鼓励学生创造性思考。"},
+  {w:"culture", p:"/ˈkʌltʃə(r)/", pos:"n.", mean:"文化", def:"n. 文化", ex:"Language is closely related to culture.", cn:"语言与文化密切相关。"},
+  {w:"custom", p:"/ˈkʌstəm/", pos:"n.", mean:"风俗", def:"n. 风俗，习俗", ex:"Different countries have different customs.", cn:"不同的国家有不同的风俗。"},
+  {w:"damage", p:"/ˈdæmɪdʒ/", pos:"n. / v.", mean:"损害", def:"n. 损害，损失　v. 损害，破坏", ex:"Smoking can damage your health seriously.", cn:"吸烟会严重损害你的健康。"},
+  {w:"decide", p:"/dɪˈsaɪd/", pos:"v.", mean:"决定", def:"v. 决定，下决心", ex:"You have to decide what to do after graduation.", cn:"你必须决定毕业后做什么。"},
+  {w:"demand", p:"/dɪˈmɑːnd/", pos:"n. / v.", mean:"需求；要求", def:"n. 需求　v. 要求", ex:"There is a growing demand for skilled workers.", cn:"对技术工人的需求日益增长。"},
+  {w:"describe", p:"/dɪˈskraɪb/", pos:"v.", mean:"描述", def:"v. 描述，描写", ex:"Can you describe the person you saw last night?", cn:"你能描述一下昨晚见到的那个人吗？"},
+  {w:"destination", p:"/ˌdestɪˈneɪʃn/", pos:"n.", mean:"目的地", def:"n. 目的地，终点", ex:"Guilin is a popular tourist destination.", cn:"桂林是一个受欢迎的旅游目的地。"},
+  {w:"determine", p:"/dɪˈtɜːmɪn/", pos:"v.", mean:"决定；确定", def:"v. 决定；确定，查明", ex:"Your attitude determines your success.", cn:"你的态度决定你的成功。"},
+  {w:"distance", p:"/ˈdɪstəns/", pos:"n.", mean:"距离", def:"n. 距离", ex:"The distance between the two cities is 300 kilometers.", cn:"这两座城市之间的距离是300公里。"},
+  {w:"economy", p:"/ɪˈkɒnəmi/", pos:"n.", mean:"经济", def:"n. 经济；节约", ex:"The development of economy brings many changes.", cn:"经济的发展带来了许多变化。"},
+  {w:"education", p:"/ˌedʒuˈkeɪʃn/", pos:"n.", mean:"教育", def:"n. 教育", ex:"Education plays an important role in one's life.", cn:"教育在人的一生中起着重要作用。"},
+  {w:"effect", p:"/ɪˈfekt/", pos:"n.", mean:"效果；影响", def:"n. 效果，作用；影响", ex:"The medicine has an immediate effect.", cn:"这种药立即见效。"},
+  {w:"effort", p:"/ˈefət/", pos:"n.", mean:"努力", def:"n. 努力，尝试", ex:"Success comes from continuous effort.", cn:"成功来自持续的努力。"},
+  {w:"encourage", p:"/ɪnˈkʌrɪdʒ/", pos:"v.", mean:"鼓励", def:"v. 鼓励，激励", ex:"Teachers should encourage students to ask questions.", cn:"老师应该鼓励学生提问。"},
+  {w:"entire", p:"/ɪnˈtaɪə(r)/", pos:"adj.", mean:"整个的", def:"adj. 整个的，全部的", ex:"He spent the entire weekend preparing for the exam.", cn:"他整个周末都在备考。"},
+  {w:"equal", p:"/ˈiːkwəl/", pos:"adj.", mean:"平等的", def:"adj. 平等的；相等的", ex:"Everyone should have equal opportunities.", cn:"每个人都应该享有平等的机会。"},
+  {w:"establish", p:"/ɪˈstæblɪʃ/", pos:"v.", mean:"建立", def:"v. 建立，设立", ex:"The university was established in 1950.", cn:"这所大学建于1950年。"},
+  {w:"examine", p:"/ɪɡˈzæmɪn/", pos:"v.", mean:"检查；考试", def:"v. 检查，审查；考，测验", ex:"The doctor examined the patient carefully.", cn:"医生仔细检查了病人。"},
+  {w:"expense", p:"/ɪkˈspens/", pos:"n.", mean:"花费", def:"n. 花费，开支", ex:"Living expenses in big cities are quite high.", cn:"大城市的生活开支相当高。"},
+  {w:"explore", p:"/ɪkˈsplɔː(r)/", pos:"v.", mean:"探索", def:"v. 探索，探究；探险", ex:"We should explore new ways to solve the problem.", cn:"我们应该探索解决问题的新方法。"},
+  {w:"familiar", p:"/fəˈmɪliə(r)/", pos:"adj.", mean:"熟悉的", def:"adj. 熟悉的", ex:"His face looks familiar to me.", cn:"他的脸我看着很眼熟。"},
+  {w:"feature", p:"/ˈfiːtʃə(r)/", pos:"n.", mean:"特征", def:"n. 特征，特色", ex:"The main feature of this phone is its long battery life.", cn:"这款手机的主要特点是电池续航长。"},
+  {w:"field", p:"/fiːld/", pos:"n.", mean:"领域；田野", def:"n. 领域，范围；田野，场地", ex:"She is an expert in the field of medicine.", cn:"她是医学领域的专家。"},
+  {w:"foreign", p:"/ˈfɒrən/", pos:"adj.", mean:"外国的", def:"adj. 外国的；陌生的", ex:"Learning a foreign language opens a new door.", cn:"学习一门外语打开一扇新的大门。"},
+  {w:"frequent", p:"/ˈfriːkwənt/", pos:"adj.", mean:"频繁的", def:"adj. 频繁的，经常的", ex:"He is a frequent visitor to the library.", cn:"他是图书馆的常客。"},
+  {w:"future", p:"/ˈfjuːtʃə(r)/", pos:"n.", mean:"未来", def:"n. 未来，将来", ex:"We should make plans for the future.", cn:"我们应该为未来做计划。"},
+  {w:"generous", p:"/ˈdʒenərəs/", pos:"adj.", mean:"慷慨的", def:"adj. 慷慨的，大方的", ex:"He is generous with his time and money.", cn:"他在时间和金钱上都很慷慨。"},
+  {w:"gentle", p:"/ˈdʒentl/", pos:"adj.", mean:"温和的", def:"adj. 温和的，轻柔的", ex:"Her gentle voice calmed the little boy.", cn:"她温和的声音安抚了小男孩。"},
+  {w:"goal", p:"/ɡəʊl/", pos:"n.", mean:"目标", def:"n. 目标，目的", ex:"Set a clear goal before you start studying.", cn:"开始学习之前先设定一个明确的目标。"},
+  {w:"healthy", p:"/ˈhelθi/", pos:"adj.", mean:"健康的", def:"adj. 健康的", ex:"A healthy diet and regular exercise keep you fit.", cn:"健康的饮食和规律的运动让你保持健康。"},
+  {w:"honest", p:"/ˈɒnɪst/", pos:"adj.", mean:"诚实的", def:"adj. 诚实的，正直的", ex:"An honest person is always trusted by others.", cn:"诚实的人总是受到别人的信任。"},
+  {w:"imagination", p:"/ɪˌmædʒɪˈneɪʃn/", pos:"n.", mean:"想象力", def:"n. 想象力", ex:"Reading fairy tales develops children's imagination.", cn:"读童话能培养孩子的想象力。"},
+  {w:"important", p:"/ɪmˈpɔːtnt/", pos:"adj.", mean:"重要的", def:"adj. 重要的", ex:"It is important to review what you have learned.", cn:"复习所学内容很重要。"},
+  {w:"include", p:"/ɪnˈkluːd/", pos:"v.", mean:"包括", def:"v. 包括，包含", ex:"The price includes breakfast and dinner.", cn:"这个价格包含早餐和晚餐。"},
+  {w:"independent", p:"/ˌɪndɪˈpendənt/", pos:"adj.", mean:"独立的", def:"adj. 独立的，自主的", ex:"College students should learn to be independent.", cn:"大学生应该学会独立。"},
+  {w:"individual", p:"/ˌɪndɪˈvɪdʒuəl/", pos:"n. / adj.", mean:"个人（的）", def:"n. 个人　adj. 个人的，个别的", ex:"Each individual has his or her own learning style.", cn:"每个人都有自己独特的学习方式。"},
+  {w:"industry", p:"/ˈɪndəstri/", pos:"n.", mean:"工业；行业", def:"n. 工业；行业，产业", ex:"The tourism industry brings money to the city.", cn:"旅游业给这座城市带来收入。"},
+  {w:"information", p:"/ˌɪnfəˈmeɪʃn/", pos:"n.", mean:"信息", def:"n. 信息，资料", ex:"You can get more information from the official website.", cn:"你可以从官方网站获取更多信息。"},
+  {w:"interest", p:"/ˈɪntrəst/", pos:"n.", mean:"兴趣；利益", def:"n. 兴趣；利益　v. 使感兴趣", ex:"He shows great interest in computer science.", cn:"他对计算机科学表现出浓厚的兴趣。"},
+  {w:"international", p:"/ˌɪntəˈnæʃnəl/", pos:"adj.", mean:"国际的", def:"adj. 国际的", ex:"The company has customers in many international markets.", cn:"这家公司在许多国际市场都有客户。"},
+  {w:"interrupt", p:"/ˌɪntəˈrʌpt/", pos:"v.", mean:"打断", def:"v. 打断，中断", ex:"Please don't interrupt me while I am speaking.", cn:"我说话时请不要打断我。"},
+  {w:"introduce", p:"/ˌɪntrəˈdjuːs/", pos:"v.", mean:"介绍", def:"v. 介绍；引进", ex:"Let me introduce my friend Tom to you.", cn:"让我把我的朋友汤姆介绍给你。"},
+  {w:"involve", p:"/ɪnˈvɒlv/", pos:"v.", mean:"涉及；参与", def:"v. 涉及，包含；使参与", ex:"The project involves a lot of teamwork.", cn:"这个项目需要大量的团队合作。"},
+  {w:"issue", p:"/ˈɪʃuː/", pos:"n.", mean:"问题；议题", def:"n. 问题，议题", ex:"Environmental protection is a hot issue today.", cn:"环境保护是当今的热点议题。"},
+  {w:"knowledge", p:"/ˈnɒlɪdʒ/", pos:"n.", mean:"知识", def:"n. 知识，学问", ex:"Knowledge is power, and learning never ends.", cn:"知识就是力量，学习永无止境。"}
+];
+
+/* ===== 数据:阅读练习 ===== */
+var READINGS = [
+  {
+    id:"r1",
+    title:"Passage 1 · 大学生兼职",
+    passage:"Many college students choose to take part-time jobs in their spare time. Some work in restaurants or shops on weekends, while others prefer tutoring younger students. Taking a part-time job has several advantages. It helps students learn how to communicate with different kinds of people and how to manage their time well. Besides, the money they earn can help pay for their daily expenses. However, experts warn that students should not let their jobs take up too much time. If a job affects their study, it is not worth doing.",
+    questions:[
+      {q:"What is one advantage of part-time jobs mentioned in the passage?", opts:["A. Students can earn a lot of money quickly","B. Students can learn to communicate with different people","C. Students can skip boring classes","D. Students can buy expensive things"], ans:"B", exp:"文章提到兼职的优点是“帮助学生学习如何与不同的人沟通以及如何管理时间”，对应选项 B。"},
+      {q:"Why does the passage warn students about part-time jobs?", opts:["A. Because the jobs are too tiring","B. Because the pay is usually very low","C. Because the jobs may affect their study","D. Because the jobs are far from campus"], ans:"C", exp:"原文最后两句：专家警告学生不应让工作占用太多时间，如果工作影响学习就不值得做，故选 C。"},
+      {q:"According to the passage, how can the money from part-time jobs be used?", opts:["A. To pay for daily expenses","B. To travel abroad","C. To buy new phones","D. To save for retirement"], ans:"A", exp:"文中说“they earn can help pay for their daily expenses”（挣的钱可帮助支付日常开销），对应 A。"},
+      {q:"What is the author's attitude towards part-time jobs?", opts:["A. Totally against them","B. Supportive but cautious","C. Indifferent","D. Very worried about them"], ans:"B", exp:"文章既肯定兼职的好处，又提醒注意平衡，整体态度是“支持但谨慎”，故选 B。"}
+    ]
+  },
+  {
+    id:"r2",
+    title:"Passage 2 · 电子阅读与纸质书",
+    passage:"The way people read has changed greatly in recent years. More and more people now read on phones, tablets and e-readers instead of paper books. Supporters of e-reading say it is convenient because thousands of books can be stored in one small device, and readers can buy new books with just a few taps. But some researchers worry that people remember less when reading on screens. They believe the feeling of turning real pages helps the brain remember the content better. For many readers, the best choice may be a combination: use digital devices for news and short articles, and keep paper books for deep reading.",
+    questions:[
+      {q:"Why do some people prefer e-reading according to the passage?", opts:["A. E-readers are cheaper than paper books","B. E-books are easier to store and buy","C. Reading on screens is better for the eyes","D. Paper books are hard to find"], ans:"B", exp:"文中说电子阅读方便在于“thousands of books can be stored in one small device”且“buy new books with just a few taps”，对应 B。"},
+      {q:"What do some researchers worry about screen reading?", opts:["A. It takes more time","B. It is bad for the environment","C. Readers may remember less","D. It is too expensive"], ans:"C", exp:"研究者担心“people remember less when reading on screens”，即屏幕阅读记忆效果更差，故选 C。"},
+      {q:"What suggestion does the passage give to readers?", opts:["A. Give up paper books completely","B. Read everything on screens","C. Only read short articles","D. Combine digital and paper reading"], ans:"D", exp:"文末建议“use digital devices for news and short articles, and keep paper books for deep reading”，即两者结合，选 D。"},
+      {q:"What does the word \"combination\" in the last sentence most probably mean?", opts:["A. The act of mixing different things together","B. The act of choosing one thing","C. The act of giving something up","D. The act of comparing two things"], ans:"A", exp:"combination 意为“结合、组合”，指把数字阅读和纸质阅读结合起来，故选 A。"}
+    ]
+  },
+  {
+    id:"r3",
+    type:"match",
+    title:"Passage 3 · 段落匹配（长篇阅读）",
+    hint:"本部分为长篇阅读段落匹配：文章分 A–F 六段，请为每个题目找到与内容最匹配的段落。",
+    paragraphs:[
+      {key:"A", text:"Many college students are good at reading and writing English, but when it comes to speaking, they often go silent. They can understand grammar rules and remember thousands of words, yet they find it hard to express themselves in real conversations."},
+      {key:"B", text:"There are two main reasons for this problem. First, most students simply do not have a chance to practice speaking in daily life. Second, many of them are afraid of making mistakes, so they would rather stay silent than speak incorrectly in front of others."},
+      {key:"C", text:"The first useful method is reading aloud and imitation. Students can choose a short English speech or a movie clip, listen to it carefully, and then read after it, trying to copy the pronunciation and intonation. Doing this for fifteen minutes every day can greatly improve oral fluency."},
+      {key:"D", text:"The second method is finding a language partner. Many universities have English corners where students meet once a week to talk about different topics. With a patient partner, learners can practice without fear, and both sides can correct each other's mistakes."},
+      {key:"E", text:"A third way is to use a mobile phone to record yourself. After speaking on a topic for two minutes, play the recording and listen carefully. You will notice your own problems in pronunciation and grammar, which helps you improve step by step."},
+      {key:"F", text:"In a word, improving spoken English is not about talent but about practice and persistence. As long as you keep talking every day, you will find yourself making progress. The key is to start now and never give up."}
+    ],
+    questions:[
+      {q:"Which paragraph explains why students are unwilling to speak English?", ans:"B", exp:"B 段列举了两个原因，其中包括“害怕犯错而宁愿保持沉默”，与题干对应。"},
+      {q:"Which paragraph suggests using recording to find your own problems?", ans:"E", exp:"E 段建议用手机录下自己的口语再回放，从而发现发音和语法问题。"},
+      {q:"Which paragraph advises imitating the pronunciation of native speakers?", ans:"C", exp:"C 段第一方法就是“朗读和模仿”，听录音并跟读、模仿发音语调。"},
+      {q:"Which paragraph concludes that practice and persistence matter most?", ans:"F", exp:"F 段是结论段，强调“not about talent but about practice and persistence”（靠练习与坚持）。"}
+    ]
+  }
+];
+
+/* ===== 数据:真题模拟 ===== */
+var CLOZE = {
+  title:"Section A · 选词填空",
+  passage:"Getting up early is a habit that many successful people share. When you get up early, you have more time to plan your day. You can do exercise, read news or work on your most difficult tasks before others wake up. Studies show that people who get up early are usually more __1__ and feel less __2__. However, it is not easy to change your sleep habit overnight. You need to go to bed early as well, and try to keep the same __3__ even on weekends. It may take a few weeks for your body to get used to the new __4__. Once you form the habit, you will find that you have more __5__ to do the things you love. So why not set your alarm clock and give it a __6__ today?",
+  slots:["__1__","__2__","__3__","__4__","__5__","__6__"],
+  options:["energy","pressured","schedule","productive","try","comfortable","routine","patient","chance"],
+  answers:["productive","pressured","schedule","routine","energy","try"],
+  exp:"1. productive 高效的(与 get up early 的积极效果搭配)；2. pressured 有压力的(less pressured 压力更小)；3. schedule 时间表(keep the same schedule 保持同样的作息)；4. routine 常规，习惯(body 适应新的日常规律)；5. energy 精力(有更多精力做喜欢的事)；6. try 尝试(give it a try 试一试)。"
+};
+
+var EXAM_READING = {
+  title:"Section C · 仔细阅读",
+  passage:"Volunteer work is becoming more and more popular among young people. Every year, thousands of college students join volunteer teams to help others. They teach children in poor areas, take care of old people, or help clean up public places. According to a recent survey, students who do volunteer work say they have learned a lot from it. They become more confident and better at working with others. Some students also say that volunteer experience makes their resumes more attractive to employers. In fact, many companies now prefer to hire people who have done volunteer work because such people are usually more responsible and willing to help.",
+  questions:[
+    {q:"What do volunteer students NOT do according to the passage?", opts:["A. Teach children in poor areas","B. Take care of old people","C. Clean up public places","D. Travel to foreign countries"], ans:"D", exp:"文中列举的志愿活动包括支教、照顾老人、清理公共场所，没有提到出国旅行，故选 D。"},
+    {q:"What have volunteer students learned according to the survey?", opts:["A. How to make more money","B. To be more confident and cooperative","C. How to avoid hard work","D. To study longer hours"], ans:"B", exp:"调查显示志愿者“become more confident and better at working with others”，即更自信、更善于合作，选 B。"},
+    {q:"Why do many companies prefer to hire volunteers?", opts:["A. Because they work for lower pay","B. Because they are usually more responsible","C. Because they have more free time","D. Because they know more languages"], ans:"B", exp:"文中说做过志愿工作的人“usually more responsible and willing to help”，更负责、乐于助人，故选 B。"},
+    {q:"What is the main idea of the passage?", opts:["A. Volunteer work is popular and beneficial","B. Volunteer work takes too much time","C. Students should not do volunteer work","D. Companies dislike volunteer experience"], ans:"A", exp:"全文围绕志愿工作受欢迎及其益处展开，主旨是“志愿服务流行且有好处”，选 A。"}
+  ]
+};
+
+/* ===== 数据:听力理解 ===== */
+var LISTENING = [
+  {
+    scene:"W: Excuse me, how long can I keep this book? \nM: You can keep it for two weeks. But if you need more time, you can renew it online. \nW: Great. What if I lose it? \nM: Then you will have to pay for it.",
+    q:"How long can the woman keep the book?",
+    opts:["A. One week","B. Two weeks","C. Three weeks","D. One month"], ans:"B",
+    exp:"男士说“You can keep it for two weeks”，即可以借两周，选 B。"
+  },
+  {
+    scene:"M: Professor, is the essay due this Friday? \nW: No, I decided to give you one more week. Please hand it in next Friday. Also, remember to include at least five references. \nM: Thank you. I will start writing tonight.",
+    q:"What does the professor ask the student to do?",
+    opts:["A. Hand in the essay this Friday","B. Write a longer essay","C. Include at least five references","D. Submit the essay online"], ans:"C",
+    exp:"教授要求“include at least five references”（至少包含五条参考文献），并且把截止时间推迟到下周五，故选 C。"
+  },
+  {
+    scene:"W: What are you going to do this weekend, Tom? \nM: I am going hiking with my classmates on Saturday. On Sunday, I will stay in the library to prepare for the English test. \nW: Sounds busy. Have fun!",
+    q:"What will the man do on Sunday?",
+    opts:["A. Go hiking with his classmates","B. Stay in the library to study","C. Watch a football match","D. Visit his grandparents"], ans:"B",
+    exp:"男士说周六去远足，周日待在图书馆准备英语考试，故选 B。"
+  }
+];
+
+/* ===== 本地存储工具 ===== */
+function storeGet(key, fallback){
+  try{
+    var raw = localStorage.getItem(key);
+    return raw === null ? fallback : JSON.parse(raw);
+  }catch(e){ return fallback; }
+}
+function storeSet(key, val){
+  try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){}
+}
+function todayKey(){
+  var d = new Date();
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function weekStartKey(){
+  var d = new Date();
+  var day = (d.getDay() + 6) % 7; // 周一为 0
+  d.setDate(d.getDate() - day);
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+
+/* ===== 学习记录 ===== */
+var learnedLog = storeGet("cet4_learned", {});
+function addLearnCount(n){
+  var t = todayKey();
+  learnedLog[t] = (learnedLog[t] || 0) + n;
+  storeSet("cet4_learned", learnedLog);
+}
+function getTodayCount(){ return learnedLog[todayKey()] || 0; }
+function getWeekCount(){
+  var wk = weekStartKey();
+  var total = 0;
+  Object.keys(learnedLog).forEach(function(k){ if(k >= wk) total += learnedLog[k]; });
+  return total;
+}
+function getStreak(){
+  var streak = 0;
+  var d = new Date();
+  // 若今天没学，从昨天开始算
+  if(!(learnedLog[todayKey()] > 0)) d.setDate(d.getDate() - 1);
+  while(true){
+    var k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+    if(learnedLog[k] > 0){ streak++; d.setDate(d.getDate() - 1); }
+    else break;
+  }
+  return streak;
+}
+
+/* ===== 生词本 / 错题本 ===== */
+var wordbook = storeGet("cet4_wordbook", []);
+var mistakes = storeGet("cet4_wrongs", []);
+
+function saveWordbook(){ storeSet("cet4_wordbook", wordbook); }
+function saveMistakes(){ storeSet("cet4_wrongs", mistakes); }
+function addMistake(item){
+  mistakes.unshift(item);
+  if(mistakes.length > 200) mistakes.pop();
+  saveMistakes();
+}
+function downloadTxt(filename, content){
+  try{
+    var blob = new Blob([content], {type:"text/plain;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 800);
+  }catch(e){
+    alert("导出失败：" + e.message);
+  }
+}
+function exportMistakesTxt(){
+  if(mistakes.length === 0){ alert("错题本是空的，没有可导出的内容"); return; }
+  var lines = ["四级备考站 · 错题导出", "导出时间：" + new Date().toLocaleString(), "共 " + mistakes.length + " 道", "================================================"];
+  mistakes.forEach(function(m, i){
+    lines.push("[" + (i+1) + "] " + m.type + "（" + m.source + "）");
+    lines.push("题目：" + m.question);
+    if(m.options && m.options.length) lines.push("选项：" + m.options.join("　"));
+    lines.push("你的答案：" + (m.userAnswer || "未作答") + "　　正确答案：" + m.correctAnswer);
+    lines.push("解析：" + m.explanation);
+    lines.push("--------------------------------");
+  });
+  downloadTxt("四级备考站-错题导出.txt", lines.join("\n"));
+}
+function exportWordbookTxt(){
+  if(wordbook.length === 0){ alert("生词本是空的，没有可导出的内容"); return; }
+  var lines = ["四级备考站 · 生词本导出", "导出时间：" + new Date().toLocaleString(), "共 " + wordbook.length + " 个词", "================================================"];
+  wordbook.forEach(function(idx){
+    var w = WORDS[idx];
+    lines.push(w.w + "  " + w.p + "  " + w.pos + "  " + w.def);
+    lines.push("  例句：" + w.ex + "（" + w.cn + "）");
+  });
+  downloadTxt("四级备考站-生词本导出.txt", lines.join("\n"));
+}
+
+/* ===== 主题 ===== */
+var themeDark = storeGet("cet4_theme", false);
+function applyTheme(){
+  document.body.classList.toggle("theme-dark", themeDark);
+  document.getElementById("iconMoon").style.display = themeDark ? "none" : "";
+  document.getElementById("iconSun").style.display = themeDark ? "" : "none";
+}
+document.getElementById("themeBtn").addEventListener("click", function(){
+  themeDark = !themeDark;
+  storeSet("cet4_theme", themeDark);
+  applyTheme();
+});
+
+/* ===== 路由 ===== */
+var ROUTES = ["home","vocab","reading","writing","exam","mistakes","wordbook"];
+function showRoute(route){
+  if(ROUTES.indexOf(route) < 0) route = "home";
+  document.querySelectorAll(".view").forEach(function(v){
+    v.classList.toggle("active", v.getAttribute("data-route") === route);
+  });
+  document.querySelectorAll(".main-nav a").forEach(function(a){
+    a.classList.toggle("active", a.getAttribute("data-route-link") === route);
+  });
+  // 关闭移动端菜单
+  document.getElementById("mainNav").classList.remove("open");
+  // 页面内数据渲染
+  if(route === "home") renderHome();
+  if(route === "vocab") updateVocabUI();
+  if(route === "reading") renderReading();
+  if(route === "exam") renderExam();
+  if(route === "mistakes") renderMistakes();
+  if(route === "wordbook") renderWordbook();
+}
+function onHash(){
+  var h = (location.hash || "#home").replace("#","");
+  showRoute(h);
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange", onHash);
+document.addEventListener("click", function(e){
+  var link = e.target.closest("[data-route-link]");
+  if(link){
+    e.preventDefault();
+    var target = link.getAttribute("data-route-link");
+    if(location.hash !== "#" + target){
+      location.hash = target;
+    }else{
+      showRoute(target);
+    }
+  }
+});
+document.getElementById("hamburger").addEventListener("click", function(e){
+  e.stopPropagation();
+  document.getElementById("mainNav").classList.toggle("open");
+});
+document.addEventListener("click", function(e){
+  var nav = document.getElementById("mainNav");
+  if(nav.classList.contains("open") && !e.target.closest(".main-nav") && !e.target.closest("#hamburger")){
+    nav.classList.remove("open");
+  }
+});
+
+/* ===== 首页渲染 ===== */
+function renderHome(){
+  document.getElementById("statToday").textContent = getTodayCount();
+  document.getElementById("statStreak").textContent = getStreak();
+  document.getElementById("statBook").textContent = wordbook.length;
+  document.getElementById("statWrong").textContent = mistakes.length;
+
+  var weekCount = getWeekCount();
+  var goal = 50;
+  var pct = Math.min(100, Math.round(weekCount / goal * 100));
+  var circ = 326.7;
+  document.getElementById("goalRing").style.strokeDashoffset = circ * (1 - pct / 100);
+  document.getElementById("goalPct").textContent = pct + "%";
+  document.getElementById("goalBarFill").style.width = pct + "%";
+  document.getElementById("goalBarText").textContent = weekCount + " / " + goal;
+  document.getElementById("goalMeta").textContent = weekCount + " / " + goal + " 词";
+
+  // 倒计时:预计 2026-12-12
+  var target = new Date(2026, 11, 12, 9, 0, 0);
+  var diff = target - new Date();
+  var days = diff > 0 ? Math.ceil(diff / 86400000) : 0;
+  document.getElementById("countdownDays").textContent = days;
+
+  // 近 7 天打卡
+  var week = [];
+  var today = new Date();
+  for(var i = 6; i >= 0; i--){
+    var d = new Date(today);
+    d.setDate(today.getDate() - i);
+    var k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+    var n = learnedLog[k] || 0;
+    week.push({key:k, n:n, label:(d.getMonth()+1) + "/" + d.getDate(), isToday:(i === 0)});
+  }
+  var strip = document.getElementById("weekStrip");
+  strip.innerHTML = "";
+  week.forEach(function(day){
+    var cell = document.createElement("div");
+    cell.className = "day-cell" + (day.n > 0 ? " done" : "") + (day.isToday ? " today" : "");
+    cell.innerHTML = '<div class="d-label">' + day.label + '</div><div class="d-num">' + (day.n > 0 ? day.n : "—") + '</div>';
+    strip.appendChild(cell);
+  });
+  var learnedDays = week.filter(function(day){ return day.n > 0; }).length;
+  document.getElementById("weekStripLabel").textContent = "7 天中打卡 " + learnedDays + " 天 · 今日已学 " + getTodayCount() + " 词";
+}
+
+/* ===== 词汇模块 ===== */
+var vocabIdx = 0;
+var vocabShuffled = false;
+
+function getVocabList(){
+  return WORDS.map(function(w,i){ return {w:w,i:i}; });
+}
+function renderWord(){
+  var word = WORDS[vocabIdx];
+  document.getElementById("wWord").textContent = word.w;
+  document.getElementById("wWordBack").textContent = word.w;
+  document.getElementById("wPhon").textContent = word.p;
+  document.getElementById("wPos").textContent = word.pos;
+  document.getElementById("wMeaning").textContent = word.mean;
+  document.getElementById("wDef").textContent = word.def;
+  document.getElementById("wEx").textContent = word.ex;
+  document.getElementById("wExCn").textContent = word.cn;
+  document.getElementById("flipCard").classList.remove("flipped");
+  updateVocabUI();
+  updateBookBtn();
+}
+function updateVocabUI(){
+  document.getElementById("vocabPos").textContent = (vocabIdx + 1) + " / " + WORDS.length;
+  document.getElementById("vocabBar").style.width = ((vocabIdx + 1) / WORDS.length * 100) + "%";
+  document.getElementById("bookCount").textContent = wordbook.length;
+}
+function flipCard(){
+  var card = document.getElementById("flipCard");
+  var wasFlipped = card.classList.contains("flipped");
+  card.classList.toggle("flipped");
+  // 翻到背面首次学习 + 计学习量
+  if(!wasFlipped && card.classList.contains("flipped")){
+    addLearnCount(1);
+    updateHomeStatsOnly();
+  }
+}
+function updateHomeStatsOnly(){
+  var h = document.getElementById("statToday");
+  if(h) h.textContent = getTodayCount();
+}
+document.getElementById("flipCard").addEventListener("click", flipCard);
+document.getElementById("prevBtn").addEventListener("click", function(){
+  vocabIdx = (vocabIdx - 1 + WORDS.length) % WORDS.length;
+  renderWord();
+});
+document.getElementById("nextBtn").addEventListener("click", function(){
+  vocabIdx = (vocabIdx + 1) % WORDS.length;
+  renderWord();
+});
+document.getElementById("shuffleBtn").addEventListener("click", function(){
+  vocabIdx = Math.floor(Math.random() * WORDS.length);
+  renderWord();
+});
+function updateBookBtn(){
+  var btn = document.getElementById("bookBtn");
+  var inBook = wordbook.some(function(id){ return id === vocabIdx; });
+  btn.textContent = inBook ? "已在生词本" : "加入生词本";
+  btn.classList.toggle("secondary", inBook);
+}
+document.getElementById("bookBtn").addEventListener("click", function(){
+  var idx = vocabIdx;
+  var i = wordbook.indexOf(idx);
+  if(i >= 0){
+    wordbook.splice(i,1);
+  }else{
+    wordbook.push(idx);
+  }
+  saveWordbook();
+  updateBookBtn();
+  document.getElementById("bookCount").textContent = wordbook.length;
+});
+
+/* ===== 词汇页 tab 切换 ===== */
+document.querySelectorAll("[data-vtab]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll("[data-vtab]").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    var target = btn.getAttribute("data-vtab");
+    document.getElementById("vtab-learn").style.display = target === "learn" ? "block" : "none";
+    document.getElementById("vtab-quiz").style.display = target === "quiz" ? "block" : "none";
+  });
+});
+
+/* ===== 单词测验 ===== */
+var quizState = {questions:[], submitted:false};
+function startQuiz(){
+  var idxs = [];
+  while(idxs.length < 10){
+    var r = Math.floor(Math.random() * WORDS.length);
+    if(idxs.indexOf(r) < 0) idxs.push(r);
+  }
+  var questions = idxs.map(function(i){
+    var options = [WORDS[i].def];
+    var guards = 0;
+    while(options.length < 4 && guards < 300){
+      guards++;
+      var d = WORDS[Math.floor(Math.random() * WORDS.length)].def;
+      if(options.indexOf(d) < 0) options.push(d);
+    }
+    for(var a = options.length - 1; a > 0; a--){
+      var b = Math.floor(Math.random() * (a + 1));
+      var tmp = options[a]; options[a] = options[b]; options[b] = tmp;
+    }
+    return {idx:i, w:WORDS[i].w, def:WORDS[i].def, options:options, ans:options.indexOf(WORDS[i].def), userAns:-1};
+  });
+  quizState.questions = questions;
+  quizState.submitted = false;
+  renderQuiz();
+}
+function renderQuiz(){
+  var area = document.getElementById("quizArea");
+  var qs = quizState.questions;
+  var html = '<div class="q-list" style="margin-top:0">';
+  qs.forEach(function(q, qi){
+    html += '<div class="q-item">';
+    html += '<div class="q-text">' + (qi+1) + '. ' + q.w + '</div>';
+    html += '<div class="q-opts">';
+    q.options.forEach(function(op, oi){
+      var markCls = "";
+      if(quizState.submitted){
+        if(oi === q.ans) markCls = " correct";
+        if(q.userAns === oi && oi !== q.ans) markCls = " wrong";
+      }
+      var checked = (q.userAns === oi) ? " checked" : "";
+      var dis = quizState.submitted ? " disabled" : "";
+      html += '<label class="' + markCls + '"><input type="radio" name="quiz-' + qi + '" value="' + oi + '"' + checked + dis + '>' + op + '</label>';
+    });
+    html += '</div>';
+    if(quizState.submitted){
+      html += '<div class="q-explanation show">答案：' + q.def + '</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  if(quizState.submitted){
+    var right = qs.filter(function(q){ return q.userAns === q.ans; }).length;
+    html += '<div class="quiz-summary"><div class="q-score">' + right + ' / ' + qs.length + '</div><div style="font-size:14px;color:var(--ink-2);margin-top:4px">答对 ' + right + ' 题，答错的单词已自动加入错题本</div></div>';
+    html += '<div class="quiz-actions"><button class="btn" id="quizAgain">再来一组</button><button class="btn ghost" id="quizBackLearn">回学习模式</button></div>';
+  }else{
+    html += '<div class="quiz-actions"><button class="btn" id="quizSubmit">交卷评分</button><button class="btn ghost" id="quizReset">重新抽题</button></div>';
+  }
+  area.innerHTML = html;
+  var again = document.getElementById("quizAgain");
+  if(again) again.addEventListener("click", startQuiz);
+  var submit = document.getElementById("quizSubmit");
+  if(submit) submit.addEventListener("click", submitQuiz);
+  var reset = document.getElementById("quizReset");
+  if(reset) reset.addEventListener("click", startQuiz);
+  var back = document.getElementById("quizBackLearn");
+  if(back) back.addEventListener("click", function(){
+    document.querySelectorAll("[data-vtab]").forEach(function(b){ b.classList.remove("active"); });
+    document.querySelector('[data-vtab="learn"]').classList.add("active");
+    document.getElementById("vtab-learn").style.display = "block";
+    document.getElementById("vtab-quiz").style.display = "none";
+  });
+}
+function submitQuiz(){
+  var qs = quizState.questions;
+  var allAnswered = true;
+  qs.forEach(function(q, qi){
+    var sel = document.querySelector('input[name="quiz-' + qi + '"]:checked');
+    q.userAns = sel ? parseInt(sel.value, 10) : -1;
+    if(q.userAns < 0) allAnswered = false;
+  });
+  if(!allAnswered){ alert("请完成所有题目再交卷"); return; }
+  qs.forEach(function(q){
+    if(q.userAns !== q.ans){
+      var w = WORDS[q.idx];
+      addMistake({
+        srcId:"quiz-word",
+        type:"单词测验",
+        source:"单词测验 · " + w.w,
+        question:"单词 \"" + w.w + "\" 的正确释义是？",
+        options:q.options,
+        userAnswer:String.fromCharCode(65 + q.userAns),
+        correctAnswer:String.fromCharCode(65 + q.ans),
+        explanation:w.def + "。例句：" + w.ex + "（" + w.cn + "）"
+      });
+    }
+  });
+  quizState.submitted = true;
+  renderQuiz();
+}
+document.getElementById("startQuizBtn").addEventListener("click", startQuiz);
+
+/* ===== 阅读模块 ===== */
+var readingSubmitted = false;
+function renderReading(){
+  var area = document.getElementById("readingArea");
+  var answeredStates = storeGet("cet4_reading_done", {});
+  var html = "";
+  READINGS.forEach(function(p){
+    var isDone = answeredStates[p.id] === true;
+    html += '<div class="card" style="margin-bottom:22px">';
+    html += '<h3 style="font-family:var(--font-serif);font-size:19px;font-weight:700;margin-bottom:14px">' + p.title + '</h3>';
+    if(p.type === "match"){
+      html += '<div class="match-hint">' + p.hint + '</div>';
+      p.paragraphs.forEach(function(par){
+        html += '<div class="match-para"><span class="para-key">' + par.key + '</span><span>' + par.text + '</span></div>';
+      });
+    }else{
+      html += '<div class="passage-box">' + p.passage + '</div>';
+    }
+    html += '<div class="q-list">';
+    p.questions.forEach(function(q, qi){
+      var savedAns = isDone ? (answeredStates[p.id + "_q" + qi] || "") : "";
+      var correctCls = isDone ? (savedAns === q.ans ? " correct" : (savedAns ? " wrong" : "")) : "";
+      html += '<div class="q-item" id="read-' + p.id + '-' + qi + '">';
+      html += '<div class="q-text">' + (qi+1) + '. ' + q.q + '</div>';
+      html += '<div class="q-opts">';
+      var opts = (p.type === "match") ? p.paragraphs.map(function(par){ return par.key + ". (段落 " + par.key + ")"; }) : q.opts;
+      opts.forEach(function(op){
+        var checked = (savedAns === op.charAt(0)) ? " checked" : "";
+        var markCls = "";
+        if(isDone && op.charAt(0) === q.ans) markCls = " correct";
+        if(isDone && savedAns === op.charAt(0) && savedAns !== q.ans) markCls = " wrong";
+        html += '<label class="' + markCls + '"><input type="radio" name="read-' + p.id + '-' + qi + '" value="' + op.charAt(0) + '"' + checked + (isDone ? ' disabled' : '') + '>' + op + '</label>';
+      });
+      html += '</div>';
+      if(isDone){
+        html += '<div class="q-explanation show">答案 ' + q.ans + '。' + q.exp + '</div>';
+      }else{
+        html += '<div class="q-explanation" id="exp-read-' + p.id + '-' + qi + '">答案 ' + q.ans + '。' + q.exp + '</div>';
+      }
+      html += '</div>';
+    });
+    html += '</div>';
+    if(isDone){
+      html += '<div class="quiz-result show"><div class="score">已完成</div><div class="score-sub">本篇文章已批改，答案与解析见上方</div></div>';
+    }else{
+      html += '<div class="quiz-actions"><button class="btn" data-submit="' + p.id + '">交卷看解析</button><button class="btn ghost" data-retry="' + p.id + '">重新作答</button></div>';
+    }
+    html += '</div>';
+  });
+  area.innerHTML = html;
+}
+document.getElementById("readingArea").addEventListener("click", function(e){
+  var submitBtn = e.target.closest("[data-submit]");
+  if(submitBtn){
+    var pid = submitBtn.getAttribute("data-submit");
+    submitReading(pid);
+    return;
+  }
+  var retryBtn = e.target.closest("[data-retry]");
+  if(retryBtn){
+    var rp = retryBtn.getAttribute("data-retry");
+    var st = storeGet("cet4_reading_done", {});
+    delete st[rp];
+    Object.keys(st).forEach(function(k){ if(k.indexOf(rp) === 0) delete st[k]; });
+    storeSet("cet4_reading_done", st);
+    // 清除该篇已产生的错题记录
+    mistakes = mistakes.filter(function(m){ return m.srcId !== rp; });
+    saveMistakes();
+    renderReading();
+  }
+});
+function submitReading(pid){
+  var reading = READINGS.filter(function(r){ return r.id === pid; })[0];
+  if(!reading) return;
+  var allAnswered = true;
+  var results = [];
+  reading.questions.forEach(function(q, qi){
+    var sel = document.querySelector('input[name="read-' + pid + '-' + qi + '"]:checked');
+    var userAns = sel ? sel.value : "";
+    if(!userAns) allAnswered = false;
+    results.push({q:q, qi:qi, userAns:userAns});
+  });
+  if(!allAnswered){
+    alert("请先完成所有题目再交卷");
+    return;
+  }
+  // 标记作答状态
+  var st = storeGet("cet4_reading_done", {});
+  st[pid] = true;
+  results.forEach(function(r){ st[pid + "_q" + r.qi] = r.userAns; });
+  storeSet("cet4_reading_done", st);
+  // 记录错题
+  results.forEach(function(r){
+    if(r.userAns !== r.q.ans){
+      addMistake({
+        srcId:pid,
+        type:"阅读练习",
+        source:reading.title,
+        question:"Q" + (r.qi+1) + ". " + r.q.q,
+        options:(reading.type === "match" ? reading.paragraphs.map(function(par){ return par.key + ". (段落 " + par.key + ")"; }) : r.q.opts),
+        userAnswer:r.userAns,
+        correctAnswer:r.q.ans,
+        explanation:r.q.exp
+      });
+    }
+  });
+  renderReading();
+}
+
+/* ===== 真题模拟模块 ===== */
+var examSubmitted = false;
+function renderExam(){
+  var area = document.getElementById("examArea");
+  var st = storeGet("cet4_exam_done", null);
+  var html = "";
+
+  // 听力理解
+  var listenDone = storeGet("cet4_listen_done", null);
+  html += '<div class="card" style="margin-bottom:22px">';
+  html += '<h3 style="font-family:var(--font-serif);font-size:19px;font-weight:700;margin-bottom:6px">Section B · 听力理解</h3>';
+  html += '<p style="font-size:13px;color:var(--ink-2);margin-bottom:14px">点击“播放对话”用浏览器语音朗读听对话，再选择答案。听不清可点“显示原文”。</p>';
+  LISTENING.forEach(function(l, li){
+    var savedAns = listenDone ? (listenDone["l_" + li] || "") : "";
+    html += '<div class="listen-card">';
+    html += '<div class="listen-actions">';
+    html += '<button class="btn sm" data-play-listen="' + li + '">' + (listenDone ? "重新播放" : "播放对话") + '</button>';
+    html += '<button class="btn sm ghost" data-show-text="' + li + '">显示原文</button>';
+    html += '</div>';
+    html += '<div class="listen-scene" id="scene-' + li + '">' + l.scene + '</div>';
+    html += '<div class="q-text">' + (li+1) + '. ' + l.q + '</div>';
+    html += '<div class="q-opts" style="margin-top:10px">';
+    l.opts.forEach(function(op){
+      var checked = (savedAns === op.charAt(0)) ? " checked" : "";
+      var markCls = "";
+      if(listenDone && op.charAt(0) === l.ans) markCls = " correct";
+      if(listenDone && savedAns === op.charAt(0) && savedAns !== l.ans) markCls = " wrong";
+      var dis = listenDone ? " disabled" : "";
+      html += '<label class="' + markCls + '"><input type="radio" name="listenq-' + li + '" value="' + op.charAt(0) + '"' + checked + dis + '>' + op + '</label>';
+    });
+    html += '</div>';
+    if(listenDone){
+      html += '<div class="q-explanation show">答案 ' + l.ans + '。' + l.exp + '</div>';
+    }else{
+      html += '<div class="q-explanation" id="exp-listen-' + li + '">答案 ' + l.ans + '。' + l.exp + '</div>';
+    }
+    html += '</div>';
+  });
+  if(listenDone){
+    html += '<div class="quiz-result show"><div class="score">已批改</div><div class="score-sub">听力部分已完成，错题已自动收录</div></div>';
+    html += '<div class="quiz-actions"><button class="btn ghost" data-listen-retry>重新作答听力</button></div>';
+  }else{
+    html += '<div class="quiz-actions"><button class="btn" data-listen-submit>交卷看解析</button></div>';
+  }
+  html += '</div>';
+
+  // 选词填空
+  html += '<div class="card" style="margin-bottom:22px">';
+  html += '<h3 style="font-family:var(--font-serif);font-size:19px;font-weight:700;margin-bottom:6px">' + CLOZE.title + '</h3>';
+  html += '<p style="font-size:13px;color:var(--ink-2);margin-bottom:14px">从下方 9 个词中为每个空选择最合适的词（每个词只能用一次）</p>';
+  var clozeText = CLOZE.passage;
+  CLOZE.slots.forEach(function(slot, si){
+    var selected = st ? (st["cloze_" + si] || "") : "";
+    var cls = "";
+    if(st){
+      cls = (selected === CLOZE.answers[si]) ? " correct-choice" : (selected ? " wrong-choice" : "");
+    }
+    var optHtml = '<option value="">选词…</option>';
+    CLOZE.options.forEach(function(o){
+      var selAttr = (selected === o) ? " selected" : "";
+      optHtml += '<option value="' + o + '"' + selAttr + '>' + o + '</option>';
+    });
+    var selAttr2 = st ? " disabled" : "";
+    clozeText = clozeText.split(slot).join('<select data-cloze="' + si + '" class="' + cls + '"' + selAttr2 + '>' + optHtml + '</select>');
+  });
+  html += '<div class="cloze-passage">' + clozeText + '</div>';
+  html += '<div class="cloze-words">候选词：' + CLOZE.options.map(function(o){ return "<b>" + o + "</b>"; }).join(" ") + '</div>';
+  if(st){
+    html += '<div class="q-explanation show" style="margin-top:14px">' + CLOZE.exp + '</div>';
+  }
+  html += '</div>';
+
+  // 仔细阅读
+  html += '<div class="card" style="margin-bottom:22px">';
+  html += '<h3 style="font-family:var(--font-serif);font-size:19px;font-weight:700;margin-bottom:14px">' + EXAM_READING.title + '</h3>';
+  html += '<div class="passage-box">' + EXAM_READING.passage + '</div>';
+  html += '<div class="q-list">';
+  EXAM_READING.questions.forEach(function(q, qi){
+    var savedAns = st ? (st["readq_" + qi] || "") : "";
+    html += '<div class="q-item" id="examq-' + qi + '">';
+    html += '<div class="q-text">' + (qi+1) + '. ' + q.q + '</div>';
+    html += '<div class="q-opts">';
+    q.opts.forEach(function(op){
+      var checked = (savedAns === op.charAt(0)) ? " checked" : "";
+      var markCls = "";
+      if(st && op.charAt(0) === q.ans) markCls = " correct";
+      if(st && savedAns === op.charAt(0) && savedAns !== q.ans) markCls = " wrong";
+      var dis = st ? " disabled" : "";
+      html += '<label class="' + markCls + '"><input type="radio" name="examq-' + qi + '" value="' + op.charAt(0) + '"' + checked + dis + '>' + op + '</label>';
+    });
+    html += '</div>';
+    if(st){
+      html += '<div class="q-explanation show">答案 ' + q.ans + '。' + q.exp + '</div>';
+    }else{
+      html += '<div class="q-explanation" id="exp-exam-' + qi + '">答案 ' + q.ans + '。' + q.exp + '</div>';
+    }
+    html += '</div>';
+  });
+  html += '</div>';
+  if(st){
+    var score = Math.round(st.score);
+    html += '<div class="quiz-result show"><div class="score">' + score + ' / 100</div><div class="score-sub">模拟卷得分（按四级题型分值折算）· 已收录 ' + st.wrongCount + ' 道错题到错题本</div></div>';
+    html += '<div class="quiz-actions"><button class="btn ghost" data-exam-retry>重新模拟一套</button></div>';
+  }else{
+    html += '<div class="quiz-actions"><button class="btn" data-exam-submit>交卷评分</button><button class="btn ghost" data-exam-reset>清空重填</button></div>';
+  }
+  html += '</div>';
+
+  area.innerHTML = html;
+}
+document.getElementById("examArea").addEventListener("click", function(e){
+  var playBtn = e.target.closest("[data-play-listen]");
+  if(playBtn){
+    speakListen(parseInt(playBtn.getAttribute("data-play-listen"), 10));
+    return;
+  }
+  var textBtn = e.target.closest("[data-show-text]");
+  if(textBtn){
+    document.getElementById("scene-" + textBtn.getAttribute("data-show-text")).classList.toggle("show");
+    return;
+  }
+  if(e.target.closest("[data-listen-submit]")){
+    submitListen();
+    return;
+  }
+  if(e.target.closest("[data-listen-retry]")){
+    storeSet("cet4_listen_done", null);
+    renderExam();
+    return;
+  }
+  if(e.target.closest("[data-exam-submit]")){
+    submitExam();
+  }
+  if(e.target.closest("[data-exam-reset]")){
+    // 清空当前作答
+    document.querySelectorAll("#examArea select[data-cloze]").forEach(function(s){ s.value = ""; });
+    document.querySelectorAll('#examArea input[type="radio"]').forEach(function(r){ r.checked = false; });
+  }
+  if(e.target.closest("[data-exam-retry]")){
+    storeSet("cet4_exam_done", null);
+    renderExam();
+  }
+});
+function submitExam(){
+  var clozeCorrect = 0;
+  var clozeTotal = CLOZE.slots.length;
+  var clozeAllAnswered = true;
+  var clozeWrongs = [];
+  CLOZE.slots.forEach(function(slot, si){
+    var sel = document.querySelector('#examArea select[data-cloze="' + si + '"]');
+    var val = sel ? sel.value : "";
+    if(!val) clozeAllAnswered = false;
+    if(val === CLOZE.answers[si]) clozeCorrect++;
+    else clozeWrongs.push({si:si, user:val, correct:CLOZE.answers[si]});
+  });
+  var readCorrect = 0;
+  var readTotal = EXAM_READING.questions.length;
+  var readAllAnswered = true;
+  var readWrongs = [];
+  EXAM_READING.questions.forEach(function(q, qi){
+    var sel = document.querySelector('input[name="examq-' + qi + '"]:checked');
+    var val = sel ? sel.value : "";
+    if(!val) readAllAnswered = false;
+    if(val === q.ans) readCorrect++;
+    else readWrongs.push({qi:qi, q:q, user:val});
+  });
+  if(!clozeAllAnswered || !readAllAnswered){
+    alert("请先完成所有题目（含选词填空的每一个空）再交卷");
+    return;
+  }
+  // 分值:选词填空每题约3.55分(6题共21.3),仔细阅读每题约14.2分(4题共56.8),其余为写作听力等,简化为两项折算
+  var score = Math.round(clozeCorrect * 3.55 + readCorrect * 14.2 + 21.9);
+  if(score > 100) score = 100;
+  var st = {score:score, wrongCount:clozeWrongs.length + readWrongs.length};
+  clozeWrongs.forEach(function(w){
+    st["cloze_" + w.si] = w.user;
+    addMistake({
+      srcId:"exam-cloze",
+      type:"真题模拟 · 选词填空",
+      source:CLOZE.title,
+      question:"第 " + (w.si+1) + " 空",
+      options:CLOZE.options,
+      userAnswer:w.user,
+      correctAnswer:w.correct,
+      explanation:CLOZE.exp
+    });
+  });
+  readWrongs.forEach(function(w){
+    st["readq_" + w.qi] = w.user;
+    addMistake({
+      srcId:"exam-reading",
+      type:"真题模拟 · 仔细阅读",
+      source:EXAM_READING.title,
+      question:"Q" + (w.qi+1) + ". " + w.q.q,
+      options:w.q.opts,
+      userAnswer:w.user,
+      correctAnswer:w.q.ans,
+      explanation:w.q.exp
+    });
+  });
+  storeSet("cet4_exam_done", st);
+  renderExam();
+}
+function submitListen(){
+  var allAnswered = true;
+  var results = [];
+  LISTENING.forEach(function(l, li){
+    var sel = document.querySelector('input[name="listenq-' + li + '"]:checked');
+    var val = sel ? sel.value : "";
+    if(!val) allAnswered = false;
+    results.push({l:l, li:li, user:val});
+  });
+  if(!allAnswered){
+    alert("请先完成所有听力题再交卷");
+    return;
+  }
+  var st = {};
+  results.forEach(function(r){
+    st["l_" + r.li] = r.user;
+    if(r.user !== r.l.ans){
+      addMistake({
+        srcId:"exam-listen",
+        type:"真题模拟 · 听力理解",
+        source:"Section B · 听力理解",
+        question:"Q" + (r.li+1) + ". " + r.l.q,
+        options:r.l.opts,
+        userAnswer:r.user,
+        correctAnswer:r.l.ans,
+        explanation:r.l.exp
+      });
+    }
+  });
+  storeSet("cet4_listen_done", st);
+  renderExam();
+}
+function speakListen(idx){
+  if(!("speechSynthesis" in window)){
+    alert("当前浏览器不支持语音朗读，已自动显示原文，请直接阅读");
+    var sc = document.getElementById("scene-" + idx);
+    if(sc) sc.classList.add("show");
+    return;
+  }
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(LISTENING[idx].scene);
+  u.lang = "en-US";
+  u.rate = 0.9;
+  var btn = document.querySelector('[data-play-listen="' + idx + '"]');
+  u.onstart = function(){ if(btn) btn.textContent = "正在播放…"; };
+  u.onend = function(){ if(btn) btn.textContent = "重新播放"; };
+  u.onerror = function(){ if(btn) btn.textContent = "播放失败"; };
+  speechSynthesis.speak(u);
+}
+
+/* ===== 写作翻译模块 ===== */
+document.querySelectorAll(".tab-btn").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    document.querySelectorAll(".tab-btn").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    var target = btn.getAttribute("data-tab");
+    document.querySelectorAll('[data-route="writing"] .pane').forEach(function(p){ p.style.display = "none"; });
+    document.getElementById(target).style.display = "block";
+  });
+});
+var draftArea = document.getElementById("draftArea");
+draftArea.value = storeGet("cet4_draft", "");
+var draftTimer = null;
+draftArea.addEventListener("input", function(){
+  clearTimeout(draftTimer);
+  draftTimer = setTimeout(function(){
+    storeSet("cet4_draft", draftArea.value);
+    var tip = document.getElementById("draftSaved");
+    tip.classList.add("show");
+    setTimeout(function(){ tip.classList.remove("show"); }, 1600);
+  }, 500);
+});
+
+/* ===== 错题本模块 ===== */
+function renderMistakes(){
+  var area = document.getElementById("mistakeArea");
+  if(mistakes.length === 0){
+    area.innerHTML = '<div class="card mistake-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><h3>错题本是空的</h3><p>去完成阅读练习或真题模拟，做错的题会自动收进来。</p><div style="margin-top:16px;display:flex;gap:10px;justify-content:center"><button class="btn sm" data-route-link="reading">去刷阅读</button><button class="btn sm secondary" data-route-link="exam">去模拟真题</button></div></div>';
+    return;
+  }
+  var html = '<div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button class="btn sm" id="exportMistakes">导出错题（txt）</button><button class="btn sm danger" id="clearMistakes">清空错题本</button></div>';
+  mistakes.forEach(function(m, idx){
+    html += '<div class="mistake-card">';
+    html += '<div class="mistake-head"><span class="mistake-tag">' + m.type + '</span><span class="mistake-src">' + m.source + '</span></div>';
+    html += '<div class="mistake-q">' + m.question + '</div>';
+    if(m.options && m.options.length){
+      html += '<div style="font-size:13.5px;color:var(--ink-2);margin-bottom:8px">' + m.options.join("　") + '</div>';
+    }
+    html += '<div class="ans-row">你的答案：<span class="yours">' + (m.userAnswer || "未作答") + '</span></div>';
+    html += '<div class="ans-row">正确答案：<span class="correct">' + m.correctAnswer + '</span></div>';
+    html += '<div class="mistake-exp">' + m.explanation + '</div>';
+    html += '<div class="mistake-actions"><button class="btn sm ghost" data-remove-mistake="' + idx + '">移除</button></div>';
+    html += '</div>';
+  });
+  area.innerHTML = html;
+  var exportBtn = document.getElementById("exportMistakes");
+  if(exportBtn) exportBtn.addEventListener("click", exportMistakesTxt);
+  var clearBtn = document.getElementById("clearMistakes");
+  if(clearBtn) clearBtn.addEventListener("click", function(){
+    if(confirm("确定清空全部错题吗？此操作不可恢复。")){
+      mistakes = [];
+      saveMistakes();
+      renderMistakes();
+    }
+  });
+  area.querySelectorAll("[data-remove-mistake]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var i = parseInt(btn.getAttribute("data-remove-mistake"), 10);
+      mistakes.splice(i, 1);
+      saveMistakes();
+      renderMistakes();
+    });
+  });
+}
+
+/* ===== 生词本模块 ===== */
+function renderWordbook(){
+  var area = document.getElementById("wordbookArea");
+  if(wordbook.length === 0){
+    area.innerHTML = '<div class="card mistake-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><h3>生词本是空的</h3><p>背单词时点“加入生词本”，不会的词就会收在这里反复复习。</p><div style="margin-top:16px"><button class="btn sm" data-route-link="vocab">去背单词</button></div></div>';
+    return;
+  }
+  var html = '<div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:14px;flex-wrap:wrap"><button class="btn sm" id="exportWordbook">导出生词（txt）</button><button class="btn sm danger" id="clearWordbook">清空生词本</button></div>';
+  wordbook.forEach(function(idx, pos){
+    var w = WORDS[idx];
+    html += '<div class="wb-item">';
+    html += '<div class="wb-main">';
+    html += '<span class="wb-word">' + w.w + '</span><span class="wb-phon">' + w.p + '</span>';
+    html += '<div class="wb-def">' + w.pos + '　' + w.def + '</div>';
+    html += '<div class="wb-ex">' + w.ex + '　' + w.cn + '</div>';
+    html += '</div>';
+    html += '<div class="wb-actions"><button class="btn sm ghost" data-wb-study="' + pos + '">去学习</button><button class="btn sm danger" data-wb-remove="' + pos + '">移除</button></div>';
+    html += '</div>';
+  });
+  area.innerHTML = html;
+  var exportBtn = document.getElementById("exportWordbook");
+  if(exportBtn) exportBtn.addEventListener("click", exportWordbookTxt);
+  var clearBtn = document.getElementById("clearWordbook");
+  if(clearBtn) clearBtn.addEventListener("click", function(){
+    if(confirm("确定清空全部生词吗？此操作不可恢复。")){
+      wordbook = [];
+      saveWordbook();
+      renderWordbook();
+    }
+  });
+  area.querySelectorAll("[data-wb-remove]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      wordbook.splice(parseInt(btn.getAttribute("data-wb-remove"), 10), 1);
+      saveWordbook();
+      renderWordbook();
+    });
+  });
+  area.querySelectorAll("[data-wb-study]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var pos = parseInt(btn.getAttribute("data-wb-study"), 10);
+      vocabIdx = wordbook[pos];
+      location.hash = "vocab";
+      renderWord();
+    });
+  });
+}
+
+/* ===== 启动 ===== */
+applyTheme();
+onHash();
+</script>
+</body>
+</html>
